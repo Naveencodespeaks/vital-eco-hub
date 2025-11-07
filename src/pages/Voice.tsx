@@ -172,17 +172,7 @@ export default function Voice() {
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Card className="border-border">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
-              <Mic className="h-8 w-8 text-primary" />
-              AI Voice Copilot
-            </CardTitle>
-            <p className="text-muted-foreground mt-2">
-              Talk to your Eco Copilot in real-time for personalized sustainability advice
-            </p>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 pt-6">
             {/* Conversation Area */}
             <Card className="bg-muted/50 border-border/50">
               <ScrollArea className="h-96 p-4">
