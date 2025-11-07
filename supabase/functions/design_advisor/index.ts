@@ -35,10 +35,38 @@ serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const { prompt } = await req.json();
+    const { prompt, image } = await req.json();
 
-    if (!prompt) {
-      throw new Error('Prompt is required');
+    if (!prompt && !image) {
+      throw new Error('Prompt or image is required');
+    }
+
+    const systemPrompt = `You are an eco-friendly design advisor specializing in sustainable solutions. 
+Provide actionable, creative, and environmentally conscious design recommendations. 
+Focus on reducing carbon footprint, using sustainable materials, and promoting circular economy principles.
+Keep your advice practical and implementable.
+
+When analyzing images, provide specific feedback about:
+- Material sustainability
+- Energy efficiency opportunities
+- Waste reduction strategies
+- Carbon impact assessment
+- Circular economy integration`;
+
+    const messages: any[] = [
+      { role: 'system', content: systemPrompt }
+    ];
+
+    if (image) {
+      messages.push({
+        role: 'user',
+        content: [
+          { type: 'text', text: prompt || 'Analyze this image for sustainability improvements' },
+          { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${image}` } }
+        ]
+      });
+    } else {
+      messages.push({ role: 'user', content: prompt });
     }
 
     // Generate design advice using Lovable AI Gateway
@@ -50,16 +78,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an eco-friendly design advisor. Provide sustainable home and workspace design suggestions. Be creative, practical, and environmentally conscious. Include materials, layouts, and energy-saving tips.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
+        messages,
       }),
     });
 
@@ -87,7 +106,7 @@ serve(async (req) => {
       .from('agent_logs')
       .insert({
         user_id: user.id,
-        summary: `Design Advisor: ${prompt.substring(0, 50)}...`,
+        summary: `Design Advisor: ${prompt ? prompt.substring(0, 50) : 'Image analysis'}...`,
         ai_action: advice,
       });
 

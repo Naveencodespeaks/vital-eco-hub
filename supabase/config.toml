@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.eco_copilot]
 verify_jwt = false
+
+[functions.voice_to_text]
+verify_jwt = true
