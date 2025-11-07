@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Zap, Droplets, Cloud, TrendingDown, Sparkles } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Layout from "@/components/Layout";
+import ForecastChart from "@/components/dashboard/ForecastChart";
 
 const Dashboard = () => {
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -177,7 +178,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts */}
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Energy Usage Trend</CardTitle>
@@ -212,6 +213,9 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Forecast Chart */}
+        <ForecastChart />
 
         {/* Prediction Form */}
         <Card>

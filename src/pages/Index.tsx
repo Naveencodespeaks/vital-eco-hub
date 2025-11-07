@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Leaf, Zap, BarChart3, Brain, ArrowRight } from "lucide-react";
+import GlobalImpactCounter from "@/components/GlobalImpactCounter";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -93,8 +94,12 @@ const Index = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-32 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-12">Make an Impact</h2>
+        <div className="mt-32">
+          <GlobalImpactCounter />
+        </div>
+
+        <div className="mt-16 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-12">Why EcoPulse AI?</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">15-30%</div>
@@ -128,8 +133,13 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t border-border mt-32 py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© 2025 EcoPulse AI. Powered by Lovable Cloud & AI.</p>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-muted-foreground">© 2025 EcoPulse AI. Powered by Lovable Cloud & AI.</p>
+            <Button variant="link" onClick={() => navigate("/about-ai")} className="text-sm">
+              About Our AI Technology
+            </Button>
+          </div>
         </div>
       </footer>
     </div>

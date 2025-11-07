@@ -115,6 +115,60 @@ export type Database = {
         }
         Relationships: []
       }
+      forecasts: {
+        Row: {
+          created_at: string
+          id: number
+          period_end: string
+          period_start: string
+          predicted_co2_kg: number
+          predicted_energy_kwh: number
+          predicted_water_liters: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          period_end: string
+          period_start: string
+          predicted_co2_kg?: number
+          predicted_energy_kwh?: number
+          predicted_water_liters?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          period_end?: string
+          period_start?: string
+          predicted_co2_kg?: number
+          predicted_energy_kwh?: number
+          predicted_water_liters?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      global_impact: {
+        Row: {
+          id: number
+          last_updated: string
+          total_co2_saved: number
+          total_users: number
+        }
+        Insert: {
+          id?: number
+          last_updated?: string
+          total_co2_saved?: number
+          total_users?: number
+        }
+        Update: {
+          id?: number
+          last_updated?: string
+          total_co2_saved?: number
+          total_users?: number
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
@@ -293,6 +347,38 @@ export type Database = {
           team_name?: string
         }
         Relationships: []
+      }
+      user_feedback: {
+        Row: {
+          created_at: string
+          feedback_type: string
+          id: number
+          report_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_type: string
+          id?: number
+          report_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback_type?: string
+          id?: number
+          report_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_feedback_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

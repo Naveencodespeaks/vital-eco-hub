@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users } from "lucide-react";
+import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Bell from "./notifications/Bell";
 
@@ -61,6 +61,7 @@ const Layout = ({ children }: LayoutProps) => {
     { path: "/bills", icon: FileText, label: "Bills" },
     { path: "/leaderboard", icon: Trophy, label: "Leaderboard" },
     { path: "/teams", icon: Users, label: "Teams" },
+    { path: "/design", icon: Sparkles, label: "Design" },
     { path: "/settings", icon: Settings, label: "Settings" },
   ];
 

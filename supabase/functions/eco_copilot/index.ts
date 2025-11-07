@@ -52,7 +52,32 @@ serve(async (req) => {
         const avgWater = metrics.reduce((sum, m) => sum + m.water_usage, 0) / metrics.length;
         const avgCO2 = metrics.reduce((sum, m) => sum + m.co2_emission, 0) / metrics.length;
 
-        // Generate AI tips
+        // Fetch user feedback to adapt advice
+        const { data: feedback } = await supabase
+          .from('user_feedback')
+          .select('feedback_type')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        const likeCount = feedback?.filter(f => f.feedback_type === 'like' || f.feedback_type === 'followed').length || 0;
+        const dislikeCount = feedback?.filter(f => f.feedback_type === 'dislike' || f.feedback_type === 'ignored').length || 0;
+
+        // Adaptive tone based on feedback
+        let tone: 'friendly' | 'motivational' | 'caution' = 'friendly';
+        if (likeCount > dislikeCount + 2) {
+          tone = 'motivational';
+        } else if (dislikeCount > likeCount + 2) {
+          tone = 'caution';
+        }
+
+        const toneEmojis = {
+          friendly: '💚',
+          motivational: '🙂',
+          caution: '⚠️'
+        } as const;
+
+        // Generate AI tips with adaptive tone
         const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -64,7 +89,7 @@ serve(async (req) => {
             messages: [
               {
                 role: 'system',
-                content: 'You are EcoPulse AI Copilot. Generate 2-3 concise, actionable sustainability tips based on user metrics. Be encouraging and specific.'
+                content: `You are EcoPulse AI Copilot. Generate 2-3 concise, actionable sustainability tips with a ${tone} tone. Use ${toneEmojis[tone]} emoji. Be encouraging and specific.`
               },
               {
                 role: 'user',
