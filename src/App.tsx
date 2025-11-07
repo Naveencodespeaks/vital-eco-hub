@@ -14,6 +14,9 @@ import Teams from "./pages/Teams";
 import Settings from "./pages/Settings";
 import Design from "./pages/Design";
 import AboutAI from "./pages/AboutAI";
+import Challenges from "./pages/Challenges";
+import Achievements from "./pages/Achievements";
+import Voice from "./pages/Voice";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +36,9 @@ const App = () => (
           <Route path="/bills" element={<Bills />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/teams" element={<Teams />} />
+          <Route path="/challenges" element={<Challenges />} />
+          <Route path="/achievements" element={<Achievements />} />
+          <Route path="/voice" element={<Voice />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/design" element={<Design />} />
           <Route path="/about-ai" element={<AboutAI />} />

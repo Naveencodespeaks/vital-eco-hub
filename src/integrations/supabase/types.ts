@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          description: string
+          earned_at: string
+          id: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          description: string
+          earned_at?: string
+          id?: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          description?: string
+          earned_at?: string
+          id?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agent_logs: {
         Row: {
           ai_action: string
@@ -87,6 +111,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      challenges: {
+        Row: {
+          created_at: string
+          description: string
+          end_date: string
+          id: number
+          is_active: boolean
+          reward_points: number
+          start_date: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          end_date: string
+          id?: number
+          is_active?: boolean
+          reward_points?: number
+          start_date?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          end_date?: string
+          id?: number
+          is_active?: boolean
+          reward_points?: number
+          start_date?: string
+          title?: string
+        }
+        Relationships: []
       }
       eco_points: {
         Row: {
@@ -291,6 +348,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      streaks: {
+        Row: {
+          best_streak: number
+          created_at: string
+          current_streak: number
+          id: number
+          last_active_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_streak?: number
+          created_at?: string
+          current_streak?: number
+          id?: number
+          last_active_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_streak?: number
+          created_at?: string
+          current_streak?: number
+          id?: number
+          last_active_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       team_members: {
         Row: {
