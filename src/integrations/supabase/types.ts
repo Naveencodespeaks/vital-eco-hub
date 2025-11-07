@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_logs: {
+        Row: {
+          ai_action: string
+          created_at: string
+          id: number
+          summary: string
+          user_id: string
+        }
+        Insert: {
+          ai_action: string
+          created_at?: string
+          id?: number
+          summary: string
+          user_id: string
+        }
+        Update: {
+          ai_action?: string
+          created_at?: string
+          id?: number
+          summary?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bills: {
         Row: {
           ai_summary: string | null
@@ -24,6 +48,7 @@ export type Database = {
           predicted_next_bill: number | null
           predicted_saving_percent: number | null
           total_amount: number
+          uploaded_file: string | null
           user_id: string
           water_usage: number
         }
@@ -36,6 +61,7 @@ export type Database = {
           predicted_next_bill?: number | null
           predicted_saving_percent?: number | null
           total_amount?: number
+          uploaded_file?: string | null
           user_id: string
           water_usage?: number
         }
@@ -48,6 +74,7 @@ export type Database = {
           predicted_next_bill?: number | null
           predicted_saving_percent?: number | null
           total_amount?: number
+          uploaded_file?: string | null
           user_id?: string
           water_usage?: number
         }
@@ -60,6 +87,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      eco_points: {
+        Row: {
+          badge_level: string
+          id: number
+          points: number
+          streak_days: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          badge_level?: string
+          id?: number
+          points?: number
+          streak_days?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          badge_level?: string
+          id?: number
+          points?: number
+          streak_days?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       goals: {
         Row: {
@@ -131,18 +185,21 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          eco_score: number | null
           email: string
           id: string
           name: string
         }
         Insert: {
           created_at?: string
+          eco_score?: number | null
           email: string
           id: string
           name: string
         }
         Update: {
           created_at?: string
+          eco_score?: number | null
           email?: string
           id?: string
           name?: string
@@ -180,6 +237,62 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      team_members: {
+        Row: {
+          id: number
+          joined_at: string
+          role: string
+          team_id: number
+          user_id: string
+        }
+        Insert: {
+          id?: number
+          joined_at?: string
+          role?: string
+          team_id: number
+          user_id: string
+        }
+        Update: {
+          id?: number
+          joined_at?: string
+          role?: string
+          team_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: number
+          team_name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: number
+          team_name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: number
+          team_name?: string
+        }
+        Relationships: []
       }
     }
     Views: {

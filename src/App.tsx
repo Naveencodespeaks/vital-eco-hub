@@ -8,6 +8,9 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
 import Analytics from "./pages/Analytics";
+import Bills from "./pages/Bills";
+import Leaderboard from "./pages/Leaderboard";
+import Teams from "./pages/Teams";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -25,6 +28,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/bills" element={<Bills />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/teams" element={<Teams />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
