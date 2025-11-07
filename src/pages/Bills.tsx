@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CameraCapture from "@/components/bills/CameraCapture";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ export default function Bills() {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [month, setMonth] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const { toast } = useToast();
 
   const { data: bills, refetch } = useQuery({
@@ -32,28 +34,36 @@ export default function Bills() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 20 * 1024 * 1024) {
-        toast({
-          title: "File too large",
-          description: "Please select a file smaller than 20MB",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select an image file",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      processFile(file);
     }
+  };
+
+  const processFile = (file: File) => {
+    if (file.size > 20 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select a file smaller than 20MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  };
+
+  const handleCameraCapture = (file: File) => {
+    processFile(file);
   };
 
   const handleAnalyzeBill = async () => {
@@ -123,6 +133,12 @@ export default function Bills() {
 
   return (
     <Layout>
+      <CameraCapture 
+        open={showCamera}
+        onClose={() => setShowCamera(false)}
+        onCapture={handleCameraCapture}
+      />
+      
       <div className="container mx-auto p-6 space-y-8">
         <div>
           <h1 className="text-4xl font-bold text-foreground mb-2">Bills Management</h1>
@@ -158,20 +174,13 @@ export default function Bills() {
                   </Label>
                 </div>
                 <div>
-                  <Input
-                    id="camera-capture"
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                  <Label htmlFor="camera-capture">
-                    <div className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-border hover:border-primary rounded-lg cursor-pointer transition-colors bg-background hover:bg-muted/50">
-                      <Camera className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-sm font-medium">Take Photo</span>
-                    </div>
-                  </Label>
+                  <div 
+                    onClick={() => setShowCamera(true)}
+                    className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-border hover:border-primary rounded-lg cursor-pointer transition-colors bg-background hover:bg-muted/50"
+                  >
+                    <Camera className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm font-medium">Take Photo</span>
+                  </div>
                 </div>
               </div>
               
