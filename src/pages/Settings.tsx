@@ -7,6 +7,24 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { User, Target } from "lucide-react";
 import Layout from "@/components/Layout";
+import { z } from "zod";
+
+const profileSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes")
+});
+
+const goalsSchema = z.object({
+  targetEnergy: z.number()
+    .min(0, "Energy target must be positive")
+    .max(100000, "Energy target is too large"),
+  targetWater: z.number()
+    .min(0, "Water target must be positive")
+    .max(1000000, "Water target is too large")
+});
 
 const Settings = () => {
   const [name, setName] = useState("");
@@ -67,6 +85,9 @@ const Settings = () => {
     setLoading(true);
 
     try {
+      // Validate input
+      const validatedData = profileSchema.parse({ name });
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
@@ -81,7 +102,7 @@ const Settings = () => {
         // Update existing profile
         const { error } = await supabase
           .from('profiles')
-          .update({ name })
+          .update({ name: validatedData.name })
           .eq('id', user.id);
 
         if (error) throw error;
@@ -91,7 +112,7 @@ const Settings = () => {
           .from('profiles')
           .insert({
             id: user.id,
-            name,
+            name: validatedData.name,
             email
           });
 
@@ -103,11 +124,19 @@ const Settings = () => {
         description: "Your profile has been successfully updated.",
       });
     } catch (error: any) {
-      toast({
-        title: "Update failed",
-        description: error.message || "Failed to update profile",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation error",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Update failed",
+          description: error.message || "Failed to update profile",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -118,6 +147,12 @@ const Settings = () => {
     setLoading(true);
 
     try {
+      // Validate input
+      const validatedData = goalsSchema.parse({
+        targetEnergy: parseFloat(targetEnergy),
+        targetWater: parseFloat(targetWater)
+      });
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
@@ -132,8 +167,8 @@ const Settings = () => {
         const { error } = await supabase
           .from('goals')
           .update({
-            target_energy_saving: parseFloat(targetEnergy),
-            target_water_saving: parseFloat(targetWater)
+            target_energy_saving: validatedData.targetEnergy,
+            target_water_saving: validatedData.targetWater
           })
           .eq('id', existingGoal.id);
 
@@ -143,8 +178,8 @@ const Settings = () => {
           .from('goals')
           .insert({
             user_id: user.id,
-            target_energy_saving: parseFloat(targetEnergy),
-            target_water_saving: parseFloat(targetWater)
+            target_energy_saving: validatedData.targetEnergy,
+            target_water_saving: validatedData.targetWater
           });
 
         if (error) throw error;
@@ -155,11 +190,19 @@ const Settings = () => {
         description: "Your sustainability goals have been saved.",
       });
     } catch (error: any) {
-      toast({
-        title: "Update failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation error",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Update failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
