@@ -43,6 +43,7 @@ export type Database = {
           ai_action: string
           created_at: string
           id: number
+          is_read: boolean
           summary: string
           user_id: string
         }
@@ -50,6 +51,7 @@ export type Database = {
           ai_action: string
           created_at?: string
           id?: number
+          is_read?: boolean
           summary: string
           user_id: string
         }
@@ -57,6 +59,7 @@ export type Database = {
           ai_action?: string
           created_at?: string
           id?: number
+          is_read?: boolean
           summary?: string
           user_id?: string
         }

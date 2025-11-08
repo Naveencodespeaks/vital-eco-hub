@@ -6,12 +6,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 
 export default function Bell() {
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: notifications } = useQuery({
     queryKey: ['agent_logs'],
@@ -24,7 +25,7 @@ export default function Bell() {
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(5);
+        .limit(10);
       
       if (error) throw error;
       return data;
@@ -32,10 +33,35 @@ export default function Bell() {
     refetchInterval: 60000, // Refetch every minute
   });
 
-  const unreadCount = notifications?.length || 0;
+  const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
+
+  const markAsRead = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !notifications) return;
+
+    const unreadIds = notifications
+      .filter(n => !n.is_read)
+      .map(n => n.id);
+
+    if (unreadIds.length > 0) {
+      await supabase
+        .from('agent_logs')
+        .update({ is_read: true })
+        .in('id', unreadIds);
+      
+      queryClient.invalidateQueries({ queryKey: ['agent_logs'] });
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (open) {
+      markAsRead();
+    }
+  };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <BellIcon className="h-4 w-4" />
@@ -57,12 +83,22 @@ export default function Bell() {
         <div className="max-h-96 overflow-y-auto">
           {notifications && notifications.length > 0 ? (
             notifications.map((log) => (
-              <div key={log.id} className="p-4 border-b last:border-b-0 hover:bg-muted/50">
-                <p className="font-medium text-sm mb-1">{log.summary}</p>
-                <p className="text-xs text-muted-foreground mb-2">
-                  {new Date(log.created_at).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-foreground">{log.ai_action}</p>
+              <div 
+                key={log.id} 
+                className={`p-4 border-b last:border-b-0 hover:bg-muted/50 ${!log.is_read ? 'bg-muted/30' : ''}`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <p className="font-medium text-sm mb-1">{log.summary}</p>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      {new Date(log.created_at).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm text-foreground">{log.ai_action}</p>
+                  </div>
+                  {!log.is_read && (
+                    <div className="w-2 h-2 rounded-full bg-primary ml-2 mt-1 flex-shrink-0" />
+                  )}
+                </div>
               </div>
             ))
           ) : (
