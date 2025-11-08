@@ -9,11 +9,19 @@ import { Loader2, Sparkles, Play, Network, TrendingUp, Award, ArrowRight } from 
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import Layout from "@/components/Layout";
+import { SkeletonCard, SkeletonStat, SkeletonChart, SkeletonInterventionCard, SkeletonEdge } from "@/components/ui/skeleton-card";
 
 export default function Agentverse() {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  
+  // Loading states for different sections
+  const [loadingPolicies, setLoadingPolicies] = useState(true);
+  const [loadingEdges, setLoadingEdges] = useState(true);
+  const [loadingGoals, setLoadingGoals] = useState(true);
+  const [loadingPoints, setLoadingPoints] = useState(true);
+  const [loadingAchievements, setLoadingAchievements] = useState(true);
   
   // Context inputs
   const [context, setContext] = useState({
@@ -62,6 +70,7 @@ export default function Agentverse() {
   };
 
   const fetchPolicies = async () => {
+    setLoadingPolicies(true);
     const { data } = await supabase
       .from('policies')
       .select('*, dt_runs(*)')
@@ -70,9 +79,11 @@ export default function Agentverse() {
       .limit(5);
     
     if (data) setPolicies(data);
+    setLoadingPolicies(false);
   };
 
   const fetchEdges = async () => {
+    setLoadingEdges(true);
     const { data } = await supabase
       .from('scm_edges')
       .select('*')
@@ -80,9 +91,11 @@ export default function Agentverse() {
       .order('weight', { ascending: false });
     
     if (data) setEdges(data);
+    setLoadingEdges(false);
   };
 
   const fetchGoals = async () => {
+    setLoadingGoals(true);
     const { data } = await supabase
       .from('goals')
       .select('*')
@@ -90,9 +103,11 @@ export default function Agentverse() {
       .maybeSingle();
     
     if (data) setGoals(data);
+    setLoadingGoals(false);
   };
 
   const fetchEcoPoints = async () => {
+    setLoadingPoints(true);
     const { data } = await supabase
       .from('eco_points')
       .select('*')
@@ -100,9 +115,11 @@ export default function Agentverse() {
       .maybeSingle();
     
     if (data) setEcoPoints(data);
+    setLoadingPoints(false);
   };
 
   const fetchAchievements = async () => {
+    setLoadingAchievements(true);
     const { data } = await supabase
       .from('achievements')
       .select('*')
@@ -111,6 +128,7 @@ export default function Agentverse() {
       .limit(3);
     
     if (data) setRecentAchievements(data);
+    setLoadingAchievements(false);
   };
 
   const handleGeneratePlan = async () => {
@@ -419,6 +437,16 @@ export default function Agentverse() {
                       )}
                     </Button>
                   </div>
+                ) : loadingGoals ? (
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <SkeletonStat />
+                      <SkeletonStat />
+                    </div>
+                    <SkeletonStat />
+                    <SkeletonStat />
+                    <div className="h-12" />
+                  </div>
                 ) : (
                   <div className="text-center py-16 px-4">
                     <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted/30 mb-4">
@@ -432,79 +460,85 @@ export default function Agentverse() {
             </Card>
           </div>
 
-        {/* Bottom: Causal Graph */}
-        <Card className="bg-card/50 backdrop-blur border-chart-3/20">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Network className="h-5 w-5 text-chart-3" />
-                  Causal Graph (XAI)
-                </CardTitle>
-                <CardDescription>Structural causal model edges</CardDescription>
+          {/* Bottom: Causal Graph */}
+          <Card className="bg-card/80 backdrop-blur-md border-chart-3/30 shadow-lg">
+            <CardHeader>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Network className="h-5 w-5 text-chart-3" />
+                    Causal Graph (XAI)
+                  </CardTitle>
+                  <CardDescription className="text-sm">Structural causal model edges</CardDescription>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleAutoDiscoverEdges}
+                  disabled={loading}
+                  className="border-chart-3/50 hover:bg-chart-3/10"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Discovering...
+                    </>
+                  ) : (
+                    <>
+                      <Network className="mr-2 h-4 w-4" />
+                      Auto-Discover Edges
+                    </>
+                  )}
+                </Button>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={handleAutoDiscoverEdges}
-                disabled={loading}
-                className="border-chart-3/50"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Discovering...
-                  </>
-                ) : (
-                  <>
-                    <Network className="mr-2 h-4 w-4" />
-                    Auto-Discover Edges
-                  </>
-                )}
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {edges.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {edges.map((edge) => (
-                  <div 
-                    key={edge.id} 
-                    className="p-3 bg-info-light/50 rounded-lg border border-info-border/30 hover:border-info-border/50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-sm">
-                        {edge.source_node} → {edge.target_node}
-                      </span>
-                      <span className="text-xs text-info font-semibold">
-                        {edge.weight.toFixed(2)}
-                      </span>
+            </CardHeader>
+            <CardContent>
+              {loadingEdges ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {[...Array(6)].map((_, i) => (
+                    <SkeletonEdge key={i} />
+                  ))}
+                </div>
+              ) : edges.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {edges.map((edge) => (
+                    <div 
+                      key={edge.id} 
+                      className="p-3 bg-info-light/50 rounded-lg border border-info-border/30 hover:border-info-border/50 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-sm">
+                          {edge.source_node} → {edge.target_node}
+                        </span>
+                        <span className="text-xs text-info font-semibold">
+                          {edge.weight.toFixed(2)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No causal edges discovered yet</p>
-                <p className="text-sm mt-2">Click "Auto-Discover Edges" to generate</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No causal edges discovered yet</p>
+                  <p className="text-sm mt-2">Click "Auto-Discover Edges" to generate</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-        {/* Analytics & Visualizations */}
-        {currentPlan && interventionChartData.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Intervention Breakdown */}
-            <Card className="bg-card/50 backdrop-blur">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-success" />
-                  Intervention Breakdown
-                </CardTitle>
-                <CardDescription>CO₂ and water savings by intervention type</CardDescription>
-              </CardHeader>
+          {/* Analytics & Visualizations */}
+          {currentPlan && interventionChartData.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+              {/* Intervention Breakdown */}
+              <Card className="bg-card/80 backdrop-blur-md shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <TrendingUp className="h-5 w-5 text-success" />
+                    Intervention Breakdown
+                  </CardTitle>
+                  <CardDescription className="text-sm">CO₂ and water savings by intervention type</CardDescription>
+                </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={interventionChartData}>
@@ -527,13 +561,13 @@ export default function Agentverse() {
             </Card>
 
             {/* Intervention Distribution Pie */}
-            <Card className="bg-card/50 backdrop-blur">
+            <Card className="bg-card/80 backdrop-blur-md shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
                   <Sparkles className="h-5 w-5 text-chart-2" />
                   CO₂ Savings Distribution
                 </CardTitle>
-                <CardDescription>Impact share by intervention</CardDescription>
+                <CardDescription className="text-sm">Impact share by intervention</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -564,18 +598,23 @@ export default function Agentverse() {
               </CardContent>
             </Card>
           </div>
-        )}
+        ) : loadingPolicies ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SkeletonChart />
+            <SkeletonChart />
+          </div>
+        ) : null}
 
-        {/* Policy Timeline Chart */}
-        {policyTimelineData.length > 0 && (
-          <Card className="bg-card/50 backdrop-blur">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-chart-3" />
-                Policy Performance Timeline
-              </CardTitle>
-              <CardDescription>Historical comparison of generated plans</CardDescription>
-            </CardHeader>
+          {/* Policy Timeline Chart */}
+          {policyTimelineData.length > 0 ? (
+            <Card className="bg-card/80 backdrop-blur-md shadow-lg animate-fade-in">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="h-5 w-5 text-chart-3" />
+                  Policy Performance Timeline
+                </CardTitle>
+                <CardDescription className="text-sm">Historical comparison of generated plans</CardDescription>
+              </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={policyTimelineData}>
@@ -623,19 +662,21 @@ export default function Agentverse() {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        )}
+        ) : loadingPolicies ? (
+          <SkeletonChart />
+        ) : null}
 
         {/* User Stats & Achievements */}
-        {ecoPoints && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-card/50 backdrop-blur border-warning-border/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-warning" />
-                  Your Eco Impact
-                </CardTitle>
-                <CardDescription>Points and progress</CardDescription>
-              </CardHeader>
+        {ecoPoints ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+            <Card className="bg-card/80 backdrop-blur-md border-warning/30 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Award className="h-5 w-5 text-warning" />
+                    Your Eco Impact
+                  </CardTitle>
+                  <CardDescription className="text-sm">Points and progress</CardDescription>
+                </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-warning-light/50 rounded-lg border border-warning-border/30">
@@ -660,14 +701,14 @@ export default function Agentverse() {
               </CardContent>
             </Card>
 
-            {recentAchievements.length > 0 && (
-              <Card className="bg-card/50 backdrop-blur border-warning-border/30">
+            {recentAchievements.length > 0 ? (
+              <Card className="bg-card/80 backdrop-blur-md border-warning/30 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-lg">
                     <Award className="h-5 w-5 text-warning" />
                     Recent Achievements
                   </CardTitle>
-                  <CardDescription>Your latest milestones</CardDescription>
+                  <CardDescription className="text-sm">Your latest milestones</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -691,23 +732,30 @@ export default function Agentverse() {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            ) : loadingAchievements ? (
+              <SkeletonCard className="bg-card/80 backdrop-blur-md border-warning/30 shadow-lg" />
+            ) : null}
           </div>
-        )}
+        ) : loadingPoints ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SkeletonCard className="bg-card/80 backdrop-blur-md border-warning/30 shadow-lg" />
+            <SkeletonCard className="bg-card/80 backdrop-blur-md border-warning/30 shadow-lg" />
+          </div>
+        ) : null}
 
         {/* Historical Policies */}
-        {policies.length > 0 && (
-          <Card className="bg-card/50 backdrop-blur">
+        {policies.length > 0 ? (
+          <Card className="bg-card/80 backdrop-blur-md shadow-lg animate-fade-in">
             <CardHeader>
-              <CardTitle>Recent Policies</CardTitle>
-              <CardDescription>Your last 5 generated prescriptive plans</CardDescription>
+              <CardTitle className="text-lg">Recent Policies</CardTitle>
+              <CardDescription className="text-sm">Your last 5 generated prescriptive plans</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {policies.map((policy) => (
                   <div 
                     key={policy.id} 
-                    className="p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-primary/50 transition-colors cursor-pointer"
+                    className="p-4 bg-muted/30 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-200 cursor-pointer hover:shadow-md"
                     onClick={() => {
                       setCurrentPlan(policy);
                       setDtRun(policy.dt_runs?.[0]);
@@ -715,9 +763,9 @@ export default function Agentverse() {
                   >
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">{policy.rationale}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(policy.created_at).toLocaleDateString()} • {policy.interventions?.length || 0} interventions
+                        <p className="text-sm font-medium line-clamp-2">{policy.rationale}</p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          📅 {new Date(policy.created_at).toLocaleDateString()} • {policy.interventions?.length || 0} interventions
                         </p>
                       </div>
                       {policy.dt_runs?.[0] && (
@@ -736,7 +784,27 @@ export default function Agentverse() {
               </div>
             </CardContent>
           </Card>
-        )}
+        ) : loadingPolicies ? (
+          <Card className="bg-card/80 backdrop-blur-md shadow-lg">
+            <CardHeader>
+              <div className="space-y-2">
+                <div className="h-6 w-48 bg-muted animate-pulse rounded" />
+                <div className="h-4 w-64 bg-muted animate-pulse rounded" />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="p-4 bg-muted/20 rounded-lg border animate-pulse">
+                  <div className="space-y-2">
+                    <div className="h-4 w-full bg-muted rounded" />
+                    <div className="h-4 w-3/4 bg-muted rounded" />
+                    <div className="h-3 w-32 bg-muted rounded mt-2" />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ) : null}
         </div>
       </div>
     </Layout>
