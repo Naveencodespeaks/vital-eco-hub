@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { User, Target, Sparkles } from "lucide-react";
+import { User, Target } from "lucide-react";
 import Layout from "@/components/Layout";
 
 const Settings = () => {
@@ -252,46 +252,6 @@ const Settings = () => {
                 {loading ? "Saving..." : "Save Goals"}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-
-        {/* Design System Preview */}
-        <Card className="overflow-hidden">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5" />
-              <span>Design Elements</span>
-            </CardTitle>
-            <CardDescription>Visual showcase of gradient effects and animations</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-8">
-            {/* Gradient Text Example */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-muted-foreground">Gradient Text</h3>
-              <div className="p-8 bg-gradient-to-br from-background to-muted rounded-lg border border-border">
-                <p className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-success bg-clip-text text-transparent text-center">
-                  Add a splash of color!
-                </p>
-              </div>
-            </div>
-
-            {/* Animated Border Example */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-muted-foreground">Border Animation</h3>
-              <div className="relative p-8 bg-gradient-to-br from-background to-muted rounded-lg overflow-hidden group">
-                {/* Animated border effect */}
-                <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary via-accent to-success opacity-20 blur-xl"></div>
-                  <div className="absolute inset-[2px] rounded-lg bg-background"></div>
-                </div>
-                <div className="relative">
-                  <p className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-success bg-clip-text text-transparent text-center">
-                    Now with a cool border!
-                  </p>
-                </div>
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary/50 rounded-lg transition-all duration-500 animate-pulse"></div>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
