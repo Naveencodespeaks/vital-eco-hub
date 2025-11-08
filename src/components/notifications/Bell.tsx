@@ -36,20 +36,28 @@ export default function Bell() {
   const unreadCount = notifications?.filter(n => !n.is_read).length || 0;
 
   const markAsRead = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !notifications) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !notifications) return;
 
-    const unreadIds = notifications
-      .filter(n => !n.is_read)
-      .map(n => n.id);
+      const unreadIds = notifications
+        .filter(n => !n.is_read)
+        .map(n => n.id);
 
-    if (unreadIds.length > 0) {
-      await supabase
-        .from('agent_logs')
-        .update({ is_read: true })
-        .in('id', unreadIds);
-      
-      queryClient.invalidateQueries({ queryKey: ['agent_logs'] });
+      if (unreadIds.length > 0) {
+        const { error } = await supabase
+          .from('agent_logs')
+          .update({ is_read: true })
+          .in('id', unreadIds);
+        
+        if (error) {
+          console.error('Error marking notifications as read:', error);
+        } else {
+          queryClient.invalidateQueries({ queryKey: ['agent_logs'] });
+        }
+      }
+    } catch (error) {
+      console.error('Error in markAsRead:', error);
     }
   };
 
