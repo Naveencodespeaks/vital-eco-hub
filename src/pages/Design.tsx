@@ -261,7 +261,7 @@ const Design = () => {
           <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-neon-yellow/20 to-info/20 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '2s' }} />
         </div>
         
-        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 glass-card overflow-hidden">
+        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-2 border-primary/30 bg-card/95 backdrop-blur-3xl overflow-hidden">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
