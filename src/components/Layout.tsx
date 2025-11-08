@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users, Sparkles, Target, Home } from "lucide-react";
+import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users, Sparkles, Target, Home, MessagesSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Bell from "./notifications/Bell";
 
@@ -58,7 +58,6 @@ const Layout = ({ children }: LayoutProps) => {
     { path: "/design", icon: Sparkles, label: "Design" },
     { path: "/house-planning", icon: Home, label: "House Plan" },
     { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { path: "/chat", icon: MessageSquare, label: "Chat" },
     { path: "/analytics", icon: BarChart3, label: "Analytics" },
     { path: "/bills", icon: FileText, label: "Bills" },
     { path: "/challenges", icon: Target, label: "Challenges" },
@@ -108,6 +107,14 @@ const Layout = ({ children }: LayoutProps) => {
       </nav>
 
       <main className="container mx-auto px-4 py-8 pb-24 md:pb-8">{children}</main>
+
+      {/* Floating Chat Button */}
+      <Link 
+        to="/chat"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40 w-14 h-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+      >
+        <MessagesSquare className="w-6 h-6 group-hover:scale-110 transition-transform" />
+      </Link>
 
       {/* Mobile Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 shadow-lg">
