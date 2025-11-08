@@ -133,7 +133,7 @@ const Design = () => {
     if (mediaRecorder && isRecording) {
       stopRecording();
     }
-    navigate('/dashboard');
+    navigate('/');
   };
 
   const handleGenerateBlueprint = () => {

@@ -62,7 +62,7 @@ const Auth = () => {
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard");
+        navigate("/");
       }
     });
 
@@ -85,7 +85,7 @@ const Auth = () => {
         password: validatedData.password,
         options: {
           data: { name: validatedData.name },
-          emailRedirectTo: `${window.location.origin}/dashboard`,
+          emailRedirectTo: `${window.location.origin}/`,
         },
       });
 
@@ -128,7 +128,7 @@ const Auth = () => {
 
       if (error) throw error;
 
-      navigate("/dashboard");
+      navigate("/");
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast({
@@ -205,7 +205,7 @@ const Auth = () => {
       });
       setIsResettingPassword(false);
       setNewPassword("");
-      navigate("/dashboard");
+      navigate("/");
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast({
