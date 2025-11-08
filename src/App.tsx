@@ -17,7 +17,7 @@ import Challenges from "./pages/Challenges";
 import Achievements from "./pages/Achievements";
 import NotFound from "./pages/NotFound";
 import Agentverse from "./pages/Agentverse";
-import BlueprintGenerator from "./pages/BlueprintGenerator";
+import HousePlanning from "./pages/HousePlanning";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +41,7 @@ const App = () => (
           <Route path="/design" element={<Design />} />
           <Route path="/about-ai" element={<AboutAI />} />
           <Route path="/agentverse" element={<Agentverse />} />
-          <Route path="/blueprint" element={<BlueprintGenerator />} />
+          <Route path="/house-planning" element={<HousePlanning />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

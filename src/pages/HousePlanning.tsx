@@ -20,7 +20,7 @@ interface BlueprintResult {
   ai_analysis: string;
 }
 
-const BlueprintGenerator = () => {
+const HousePlanning = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -78,14 +78,14 @@ const BlueprintGenerator = () => {
 
       setResult(data.blueprint);
       toast({
-        title: "Blueprint Generated!",
-        description: "Your sustainable Vastu-compliant blueprint is ready.",
+        title: "House Plan Generated!",
+        description: "Your sustainable Vastu-compliant house plan is ready.",
       });
     } catch (error) {
-      console.error('Error generating blueprint:', error);
+      console.error('Error generating house plan:', error);
       toast({
         title: "Generation Failed",
-        description: error instanceof Error ? error.message : "Failed to generate blueprint",
+        description: error instanceof Error ? error.message : "Failed to generate house plan",
         variant: "destructive",
       });
     } finally {
@@ -109,10 +109,10 @@ const BlueprintGenerator = () => {
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
               <Home className="h-8 w-8 text-primary" />
-              Sustainable Blueprint Generator
+              Sustainable House Planning
             </h1>
             <p className="text-muted-foreground">
-              Generate AI-powered, Vastu-compliant house blueprints with sustainability insights
+              Generate AI-powered, Vastu-compliant house plans with sustainability insights
             </p>
           </div>
 
@@ -227,10 +227,10 @@ const BlueprintGenerator = () => {
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating Blueprint...
+                      Generating House Plan...
                     </>
                   ) : (
-                    'Generate Blueprint'
+                    'Generate House Plan'
                   )}
                 </Button>
               </CardContent>
@@ -243,12 +243,12 @@ const BlueprintGenerator = () => {
                   {result.blueprint_image_url && (
                     <Card>
                       <CardHeader>
-                        <CardTitle>Generated Blueprint</CardTitle>
+                        <CardTitle>Generated House Plan</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <img
                           src={result.blueprint_image_url}
-                          alt="Generated Blueprint"
+                          alt="Generated House Plan"
                           className="w-full rounded-lg border"
                         />
                       </CardContent>
@@ -310,7 +310,7 @@ const BlueprintGenerator = () => {
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Home className="h-16 w-16 text-muted-foreground mb-4" />
                     <p className="text-muted-foreground text-center">
-                      Fill in the parameters and click Generate to see your blueprint
+                      Fill in the parameters and click Generate to see your house plan
                     </p>
                   </CardContent>
                 </Card>
@@ -323,4 +323,4 @@ const BlueprintGenerator = () => {
   );
 };
 
-export default BlueprintGenerator;
+export default HousePlanning;
