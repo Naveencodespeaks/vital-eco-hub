@@ -19,6 +19,7 @@ import Agentverse from "./pages/Agentverse";
 import HousePlanning from "./pages/HousePlanning";
 import Impact from "./pages/Impact";
 import Predict from "./pages/Predict";
+import SmartCity from "./pages/SmartCity";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/predict" element={<Predict />} />
+          <Route path="/smart-city" element={<SmartCity />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/bills" element={<Bills />} />
