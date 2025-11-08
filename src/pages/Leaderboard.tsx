@@ -53,42 +53,19 @@ export default function ImageAnalyzer() {
       reader.onload = async () => {
         const base64Image = reader.result as string;
 
-        const lovableApiKey = import.meta.env.VITE_LOVABLE_API_KEY;
-        
-        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${lovableApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'google/gemini-2.5-flash',
-            messages: [
-              {
-                role: 'user',
-                content: [
-                  {
-                    type: 'text',
-                    text: 'Analyze this image in detail. Describe what you see, identify objects, colors, composition, and any notable features. Provide a comprehensive analysis.'
-                  },
-                  {
-                    type: 'image_url',
-                    image_url: { url: base64Image }
-                  }
-                ]
-              }
-            ],
-          }),
+        const { data, error } = await supabase.functions.invoke('analyze_image', {
+          body: { imageData: base64Image }
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to analyze image');
+        if (error) {
+          throw new Error(error.message || 'Failed to analyze image');
         }
 
-        const data = await response.json();
-        const analysis = data.choices?.[0]?.message?.content || 'No analysis available';
+        if (!data?.analysis) {
+          throw new Error('No analysis returned from server');
+        }
         
-        setResult(analysis);
+        setResult(data.analysis);
         toast({
           title: "Analysis complete",
           description: "Image has been analyzed successfully"
