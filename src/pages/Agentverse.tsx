@@ -209,14 +209,20 @@ export default function Agentverse() {
     confidence: (pol.dt_runs?.[0]?.confidence_level || 0) * 100
   }));
 
-  const COLORS = ['#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#6366f1'];
+  const COLORS = [
+    'hsl(var(--chart-1))',
+    'hsl(var(--chart-2))',
+    'hsl(var(--chart-3))',
+    'hsl(var(--chart-4))',
+    'hsl(var(--chart-5))'
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-emerald-950/10 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-success-light p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-success to-chart-2 bg-clip-text text-transparent">
             PCW-NO: Prescriptive Nexus Optimizer
           </h1>
           <p className="text-muted-foreground">
@@ -227,10 +233,10 @@ export default function Agentverse() {
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column: Causal Policy Engine */}
-          <Card className="bg-card/50 backdrop-blur border-emerald-500/20">
+          <Card className="bg-card/50 backdrop-blur border-success-border/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-emerald-500" />
+                <Sparkles className="h-5 w-5 text-success" />
                 Causal Policy Engine
               </CardTitle>
               <CardDescription>Input your context to generate a prescriptive plan</CardDescription>
@@ -279,7 +285,7 @@ export default function Agentverse() {
               <Button 
                 onClick={handleGeneratePlan} 
                 disabled={generating}
-                className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                className="w-full bg-gradient-to-r from-success to-chart-2 hover:opacity-90"
               >
                 {generating ? (
                   <>
@@ -295,26 +301,26 @@ export default function Agentverse() {
               </Button>
 
               {currentPlan && (
-                <div className="mt-6 space-y-4 p-4 bg-emerald-950/20 rounded-lg border border-emerald-500/30">
+                <div className="mt-6 space-y-4 p-4 bg-success-light/50 rounded-lg border border-success-border/30">
                   <div>
-                    <h3 className="font-semibold text-emerald-400 mb-2">Rationale</h3>
+                    <h3 className="font-semibold text-success mb-2">Rationale</h3>
                     <p className="text-sm text-muted-foreground">{currentPlan.rationale}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-emerald-400 mb-2">Interventions</h3>
+                    <h3 className="font-semibold text-success mb-2">Interventions</h3>
                     <div className="space-y-2">
                       {currentPlan.interventions?.map((intervention: any, idx: number) => (
-                        <div key={idx} className="p-3 bg-background/50 rounded border border-emerald-500/20">
+                        <div key={idx} className="p-3 bg-background/50 rounded border border-success-border/20">
                           <div className="flex justify-between items-start">
                             <div>
                               <p className="font-medium capitalize">{intervention.type?.replace(/_/g, ' ')}</p>
                               <p className="text-xs text-muted-foreground">{intervention.window}</p>
                             </div>
                             <div className="text-right text-sm">
-                              <div className="text-emerald-400">CO₂: {intervention.expected_kg} kg</div>
+                              <div className="text-success">CO₂: {intervention.expected_kg} kg</div>
                               {intervention.expected_water_kl && (
-                                <div className="text-blue-400">H₂O: {intervention.expected_water_kl} kL</div>
+                                <div className="text-info">H₂O: {intervention.expected_water_kl} kL</div>
                               )}
                             </div>
                           </div>
@@ -328,10 +334,10 @@ export default function Agentverse() {
           </Card>
 
           {/* Right Column: Digital Twin Simulation */}
-          <Card className="bg-card/50 backdrop-blur border-teal-500/20">
+          <Card className="bg-card/50 backdrop-blur border-chart-2/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Play className="h-5 w-5 text-teal-500" />
+                <Play className="h-5 w-5 text-chart-2" />
                 Digital Twin Simulation
               </CardTitle>
               <CardDescription>Simulated outcomes and savings</CardDescription>
@@ -340,30 +346,30 @@ export default function Agentverse() {
               {dtRun ? (
                 <>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-emerald-950/20 rounded-lg border border-emerald-500/30">
+                    <div className="p-4 bg-success-light/50 rounded-lg border border-success-border/30">
                       <p className="text-sm text-muted-foreground">Total CO₂ Savings</p>
-                      <p className="text-2xl font-bold text-emerald-400">{dtRun.total_kg} kg</p>
+                      <p className="text-2xl font-bold text-success">{dtRun.total_kg} kg</p>
                     </div>
-                    <div className="p-4 bg-blue-950/20 rounded-lg border border-blue-500/30">
+                    <div className="p-4 bg-info-light/50 rounded-lg border border-info-border/30">
                       <p className="text-sm text-muted-foreground">Water Savings</p>
-                      <p className="text-2xl font-bold text-blue-400">{dtRun.total_water_kl} kL</p>
+                      <p className="text-2xl font-bold text-info">{dtRun.total_water_kl} kL</p>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-purple-950/20 rounded-lg border border-purple-500/30">
+                  <div className="p-4 bg-chart-5/10 rounded-lg border border-chart-5/30">
                     <p className="text-sm text-muted-foreground mb-2">Confidence Level</p>
                     <Progress value={dtRun.confidence_level * 100} className="h-2" />
-                    <p className="text-right text-sm mt-1 text-purple-400">
+                    <p className="text-right text-sm mt-1 text-chart-5">
                       {(dtRun.confidence_level * 100).toFixed(1)}%
                     </p>
                   </div>
 
                   {goals && (
-                    <div className="p-4 bg-amber-950/20 rounded-lg border border-amber-500/30">
+                    <div className="p-4 bg-warning-light/50 rounded-lg border border-warning-border/30">
                       <p className="text-sm text-muted-foreground mb-2">Progress vs Target</p>
                       <Progress value={goalProgress} className="h-2" />
                       <div className="flex justify-between text-xs mt-1">
-                        <span className="text-amber-400">{dtRun.total_kg} kg</span>
+                        <span className="text-warning">{dtRun.total_kg} kg</span>
                         <span className="text-muted-foreground">Target: {goals.target_energy_saving} kg</span>
                       </div>
                     </div>
@@ -372,7 +378,7 @@ export default function Agentverse() {
                   <Button 
                     onClick={handleApplyPlan} 
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700"
+                    className="w-full bg-gradient-to-r from-chart-2 to-chart-3 hover:opacity-90"
                   >
                     {loading ? (
                       <>
@@ -398,12 +404,12 @@ export default function Agentverse() {
         </div>
 
         {/* Bottom: Causal Graph */}
-        <Card className="bg-card/50 backdrop-blur border-cyan-500/20">
+        <Card className="bg-card/50 backdrop-blur border-chart-3/20">
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Network className="h-5 w-5 text-cyan-500" />
+                  <Network className="h-5 w-5 text-chart-3" />
                   Causal Graph (XAI)
                 </CardTitle>
                 <CardDescription>Structural causal model edges</CardDescription>
@@ -413,7 +419,7 @@ export default function Agentverse() {
                 size="sm"
                 onClick={handleAutoDiscoverEdges}
                 disabled={loading}
-                className="border-cyan-500/50"
+                className="border-chart-3/50"
               >
                 {loading ? (
                   <>
@@ -435,13 +441,13 @@ export default function Agentverse() {
                 {edges.map((edge) => (
                   <div 
                     key={edge.id} 
-                    className="p-3 bg-cyan-950/20 rounded-lg border border-cyan-500/30 hover:border-cyan-500/50 transition-colors"
+                    className="p-3 bg-info-light/50 rounded-lg border border-info-border/30 hover:border-info-border/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-sm">
                         {edge.source_node} → {edge.target_node}
                       </span>
-                      <span className="text-xs text-cyan-400 font-semibold">
+                      <span className="text-xs text-info font-semibold">
                         {edge.weight.toFixed(2)}
                       </span>
                     </div>
@@ -465,7 +471,7 @@ export default function Agentverse() {
             <Card className="bg-card/50 backdrop-blur">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-emerald-500" />
+                  <TrendingUp className="h-5 w-5 text-success" />
                   Intervention Breakdown
                 </CardTitle>
                 <CardDescription>CO₂ and water savings by intervention type</CardDescription>
@@ -482,10 +488,10 @@ export default function Agentverse() {
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '8px'
                       }} 
-                    />
+                    /> 
                     <Legend />
-                    <Bar dataKey="co2" name="CO₂ (kg)" fill="#10b981" />
-                    <Bar dataKey="water" name="Water (kL)" fill="#06b6d4" />
+                    <Bar dataKey="co2" name="CO₂ (kg)" fill="hsl(var(--success))" />
+                    <Bar dataKey="water" name="Water (kL)" fill="hsl(var(--info))" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -495,7 +501,7 @@ export default function Agentverse() {
             <Card className="bg-card/50 backdrop-blur">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-teal-500" />
+                  <Sparkles className="h-5 w-5 text-chart-2" />
                   CO₂ Savings Distribution
                 </CardTitle>
                 <CardDescription>Impact share by intervention</CardDescription>
@@ -536,7 +542,7 @@ export default function Agentverse() {
           <Card className="bg-card/50 backdrop-blur">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-cyan-500" />
+                <TrendingUp className="h-5 w-5 text-chart-3" />
                 Policy Performance Timeline
               </CardTitle>
               <CardDescription>Historical comparison of generated plans</CardDescription>
@@ -561,28 +567,28 @@ export default function Agentverse() {
                     type="monotone" 
                     dataKey="co2Savings" 
                     name="CO₂ Savings (kg)" 
-                    stroke="#10b981" 
+                    stroke="hsl(var(--success))" 
                     strokeWidth={2}
-                    dot={{ fill: '#10b981', r: 4 }}
+                    dot={{ fill: 'hsl(var(--success))', r: 4 }}
                   />
                   <Line 
                     yAxisId="left"
                     type="monotone" 
                     dataKey="waterSavings" 
                     name="Water Savings (kL)" 
-                    stroke="#06b6d4" 
+                    stroke="hsl(var(--info))" 
                     strokeWidth={2}
-                    dot={{ fill: '#06b6d4', r: 4 }}
+                    dot={{ fill: 'hsl(var(--info))', r: 4 }}
                   />
                   <Line 
                     yAxisId="right"
                     type="monotone" 
                     dataKey="confidence" 
                     name="Confidence (%)" 
-                    stroke="#a855f7" 
+                    stroke="hsl(var(--chart-5))" 
                     strokeWidth={2}
                     strokeDasharray="5 5"
-                    dot={{ fill: '#a855f7', r: 4 }}
+                    dot={{ fill: 'hsl(var(--chart-5))', r: 4 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -593,29 +599,29 @@ export default function Agentverse() {
         {/* User Stats & Achievements */}
         {ecoPoints && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-card/50 backdrop-blur border-amber-500/20">
+            <Card className="bg-card/50 backdrop-blur border-warning-border/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-amber-500" />
+                  <Award className="h-5 w-5 text-warning" />
                   Your Eco Impact
                 </CardTitle>
                 <CardDescription>Points and progress</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-amber-950/20 rounded-lg border border-amber-500/30">
+                  <div className="p-4 bg-warning-light/50 rounded-lg border border-warning-border/30">
                     <p className="text-sm text-muted-foreground">Total Points</p>
-                    <p className="text-3xl font-bold text-amber-400">{ecoPoints.points}</p>
+                    <p className="text-3xl font-bold text-warning">{ecoPoints.points}</p>
                   </div>
-                  <div className="p-4 bg-purple-950/20 rounded-lg border border-purple-500/30">
+                  <div className="p-4 bg-chart-5/10 rounded-lg border border-chart-5/30">
                     <p className="text-sm text-muted-foreground">Badge Level</p>
-                    <p className="text-lg font-semibold text-purple-400">{ecoPoints.badge_level}</p>
+                    <p className="text-lg font-semibold text-chart-5">{ecoPoints.badge_level}</p>
                   </div>
                 </div>
-                <div className="p-4 bg-emerald-950/20 rounded-lg border border-emerald-500/30">
+                <div className="p-4 bg-success-light/50 rounded-lg border border-success-border/30">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm text-muted-foreground">Streak Days</p>
-                    <p className="text-2xl font-bold text-emerald-400">{ecoPoints.streak_days}</p>
+                    <p className="text-2xl font-bold text-success">{ecoPoints.streak_days}</p>
                   </div>
                   <Progress value={(ecoPoints.streak_days % 7) * (100 / 7)} className="h-2" />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -626,10 +632,10 @@ export default function Agentverse() {
             </Card>
 
             {recentAchievements.length > 0 && (
-              <Card className="bg-card/50 backdrop-blur border-yellow-500/20">
+              <Card className="bg-card/50 backdrop-blur border-warning-border/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Award className="h-5 w-5 text-yellow-500" />
+                    <Award className="h-5 w-5 text-warning" />
                     Recent Achievements
                   </CardTitle>
                   <CardDescription>Your latest milestones</CardDescription>
@@ -639,12 +645,12 @@ export default function Agentverse() {
                     {recentAchievements.map((achievement) => (
                       <div 
                         key={achievement.id}
-                        className="p-3 bg-yellow-950/20 rounded-lg border border-yellow-500/30"
+                        className="p-3 bg-warning-light/50 rounded-lg border border-warning-border/30"
                       >
                         <div className="flex items-start gap-3">
-                          <Award className="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                          <Award className="h-5 w-5 text-warning mt-0.5 flex-shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-yellow-400">{achievement.title}</p>
+                            <p className="font-medium text-warning">{achievement.title}</p>
                             <p className="text-sm text-muted-foreground mt-1">{achievement.description}</p>
                             <p className="text-xs text-muted-foreground mt-1">
                               {new Date(achievement.earned_at).toLocaleDateString()}
@@ -687,10 +693,10 @@ export default function Agentverse() {
                       </div>
                       {policy.dt_runs?.[0] && (
                         <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-semibold text-emerald-400">
+                          <p className="text-sm font-semibold text-success">
                             {policy.dt_runs[0].total_kg} kg CO₂
                           </p>
-                          <p className="text-xs text-blue-400">
+                          <p className="text-xs text-info">
                             {policy.dt_runs[0].total_water_kl} kL H₂O
                           </p>
                         </div>
