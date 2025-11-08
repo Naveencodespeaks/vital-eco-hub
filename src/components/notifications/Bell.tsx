@@ -38,11 +38,11 @@ export default function Bell() {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
-          <BellIcon className="h-5 w-5" />
+          <BellIcon className="h-4 w-4" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs"
             >
               {unreadCount}
             </Badge>
