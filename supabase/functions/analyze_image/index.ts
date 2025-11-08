@@ -25,7 +25,8 @@ serve(async (req) => {
 
     console.log('Analyzing image with Gemini...');
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    // First, get text analysis
+    const analysisResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${lovableApiKey}`,
@@ -51,24 +52,69 @@ serve(async (req) => {
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('AI API error:', response.status, errorText);
+    if (!analysisResponse.ok) {
+      const errorText = await analysisResponse.text();
+      console.error('AI API error:', analysisResponse.status, errorText);
       
-      if (response.status === 429) {
+      if (analysisResponse.status === 429) {
         throw new Error('Rate limit exceeded. Please try again later.');
       }
-      if (response.status === 402) {
+      if (analysisResponse.status === 402) {
         throw new Error('AI credits depleted. Please add credits to your workspace.');
       }
       throw new Error(`AI analysis failed: ${errorText}`);
     }
 
-    const data = await response.json();
-    const analysis = data.choices?.[0]?.message?.content || 'No analysis available';
+    const analysisData = await analysisResponse.json();
+    const analysis = analysisData.choices?.[0]?.message?.content || 'No analysis available';
+
+    console.log('Generating enhanced version of image...');
+
+    // Generate an enhanced version of the image
+    const imageResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${lovableApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash-image-preview',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: 'Enhance and improve this image by making colors more vibrant, improving clarity, and optimizing the overall composition while maintaining the original subject and style.'
+              },
+              {
+                type: 'image_url',
+                image_url: { url: imageData }
+              }
+            ]
+          }
+        ],
+        modalities: ['image', 'text']
+      }),
+    });
+
+    if (!imageResponse.ok) {
+      console.error('Image generation error:', imageResponse.status);
+      // Return analysis without modified image if image generation fails
+      return new Response(
+        JSON.stringify({ analysis, modifiedImage: null }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200 
+        }
+      );
+    }
+
+    const imageResponseData = await imageResponse.json();
+    const modifiedImage = imageResponseData.choices?.[0]?.message?.images?.[0]?.image_url?.url || null;
 
     return new Response(
-      JSON.stringify({ analysis }),
+      JSON.stringify({ analysis, modifiedImage }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200 

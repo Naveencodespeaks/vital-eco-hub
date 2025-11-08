@@ -12,6 +12,7 @@ export default function ImageAnalyzer() {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<string>("");
+  const [modifiedImage, setModifiedImage] = useState<string>("");
   const { toast } = useToast();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +41,7 @@ export default function ImageAnalyzer() {
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     setResult("");
+    setModifiedImage("");
   };
 
   const handleAnalyze = async () => {
@@ -66,9 +68,12 @@ export default function ImageAnalyzer() {
         }
         
         setResult(data.analysis);
+        if (data.modifiedImage) {
+          setModifiedImage(data.modifiedImage);
+        }
         toast({
           title: "Analysis complete",
-          description: "Image has been analyzed successfully"
+          description: "Image has been analyzed and enhanced successfully"
         });
       };
     } catch (error: any) {
@@ -154,16 +159,35 @@ export default function ImageAnalyzer() {
         </Card>
 
         {result && (
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-            <CardHeader>
-              <CardTitle>Analysis Result</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose prose-sm max-w-none">
-                <p className="text-foreground whitespace-pre-wrap">{result}</p>
-              </div>
-            </CardContent>
-          </Card>
+          <>
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+              <CardHeader>
+                <CardTitle>Analysis Result</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="prose prose-sm max-w-none">
+                  <p className="text-foreground whitespace-pre-wrap">{result}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {modifiedImage && (
+              <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+                <CardHeader>
+                  <CardTitle>Enhanced Image</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="border border-border rounded-lg p-4">
+                    <img 
+                      src={modifiedImage} 
+                      alt="Enhanced version" 
+                      className="max-w-full h-auto rounded-md mx-auto max-h-96 object-contain"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
       </div>
     </Layout>
