@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Sparkles, Play, Network } from "lucide-react";
+import { Loader2, Sparkles, Play, Network, TrendingUp, Award } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 export default function Agentverse() {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,10 @@ export default function Agentverse() {
   
   // User goals
   const [goals, setGoals] = useState<any>(null);
+  
+  // Points and achievements
+  const [ecoPoints, setEcoPoints] = useState<any>(null);
+  const [recentAchievements, setRecentAchievements] = useState<any[]>([]);
 
   useEffect(() => {
     fetchUser();
@@ -43,6 +48,8 @@ export default function Agentverse() {
       fetchPolicies();
       fetchEdges();
       fetchGoals();
+      fetchEcoPoints();
+      fetchAchievements();
     }
   }, [userId]);
 
@@ -82,6 +89,27 @@ export default function Agentverse() {
       .maybeSingle();
     
     if (data) setGoals(data);
+  };
+
+  const fetchEcoPoints = async () => {
+    const { data } = await supabase
+      .from('eco_points')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (data) setEcoPoints(data);
+  };
+
+  const fetchAchievements = async () => {
+    const { data } = await supabase
+      .from('achievements')
+      .select('*')
+      .eq('user_id', userId)
+      .order('earned_at', { ascending: false })
+      .limit(3);
+    
+    if (data) setRecentAchievements(data);
   };
 
   const handleGeneratePlan = async () => {
@@ -125,6 +153,11 @@ export default function Agentverse() {
       if (error) throw error;
 
       toast.success(data.message || "Plan applied successfully!");
+      
+      // Refresh data after applying plan
+      fetchEcoPoints();
+      fetchAchievements();
+      fetchPolicies();
     } catch (error: any) {
       console.error('Error applying plan:', error);
       toast.error(error.message || "Failed to apply plan");
@@ -140,6 +173,23 @@ export default function Agentverse() {
   const goalProgress = goals && dtRun 
     ? Math.min((dtRun.total_kg / goals.target_energy_saving) * 100, 100)
     : 0;
+
+  // Chart data preparation
+  const interventionChartData = currentPlan?.interventions?.map((int: any, idx: number) => ({
+    name: int.type?.replace(/_/g, ' ').substring(0, 15),
+    co2: int.expected_kg || 0,
+    water: int.expected_water_kl || 0,
+    fill: `hsl(${140 + idx * 40}, 70%, 50%)`
+  })) || [];
+
+  const policyTimelineData = policies.slice(0, 5).reverse().map((pol, idx) => ({
+    name: `Plan ${idx + 1}`,
+    co2Savings: pol.dt_runs?.[0]?.total_kg || 0,
+    waterSavings: pol.dt_runs?.[0]?.total_water_kl || 0,
+    confidence: (pol.dt_runs?.[0]?.confidence_level || 0) * 100
+  }));
+
+  const COLORS = ['#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#6366f1'];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-emerald-950/10 p-4 md:p-8">
@@ -377,6 +427,208 @@ export default function Agentverse() {
           </CardContent>
         </Card>
 
+        {/* Analytics & Visualizations */}
+        {currentPlan && interventionChartData.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Intervention Breakdown */}
+            <Card className="bg-card/50 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-emerald-500" />
+                  Intervention Breakdown
+                </CardTitle>
+                <CardDescription>CO₂ and water savings by intervention type</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={interventionChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }} 
+                    />
+                    <Legend />
+                    <Bar dataKey="co2" name="CO₂ (kg)" fill="#10b981" />
+                    <Bar dataKey="water" name="Water (kL)" fill="#06b6d4" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Intervention Distribution Pie */}
+            <Card className="bg-card/50 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-teal-500" />
+                  CO₂ Savings Distribution
+                </CardTitle>
+                <CardDescription>Impact share by intervention</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={interventionChartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="co2"
+                    >
+                      {interventionChartData.map((entry: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }} 
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Policy Timeline Chart */}
+        {policyTimelineData.length > 0 && (
+          <Card className="bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-cyan-500" />
+                Policy Performance Timeline
+              </CardTitle>
+              <CardDescription>Historical comparison of generated plans</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={policyTimelineData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+                  <YAxis yAxisId="left" stroke="hsl(var(--muted-foreground))" />
+                  <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }} 
+                  />
+                  <Legend />
+                  <Line 
+                    yAxisId="left"
+                    type="monotone" 
+                    dataKey="co2Savings" 
+                    name="CO₂ Savings (kg)" 
+                    stroke="#10b981" 
+                    strokeWidth={2}
+                    dot={{ fill: '#10b981', r: 4 }}
+                  />
+                  <Line 
+                    yAxisId="left"
+                    type="monotone" 
+                    dataKey="waterSavings" 
+                    name="Water Savings (kL)" 
+                    stroke="#06b6d4" 
+                    strokeWidth={2}
+                    dot={{ fill: '#06b6d4', r: 4 }}
+                  />
+                  <Line 
+                    yAxisId="right"
+                    type="monotone" 
+                    dataKey="confidence" 
+                    name="Confidence (%)" 
+                    stroke="#a855f7" 
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={{ fill: '#a855f7', r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* User Stats & Achievements */}
+        {ecoPoints && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-card/50 backdrop-blur border-amber-500/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Award className="h-5 w-5 text-amber-500" />
+                  Your Eco Impact
+                </CardTitle>
+                <CardDescription>Points and progress</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-amber-950/20 rounded-lg border border-amber-500/30">
+                    <p className="text-sm text-muted-foreground">Total Points</p>
+                    <p className="text-3xl font-bold text-amber-400">{ecoPoints.points}</p>
+                  </div>
+                  <div className="p-4 bg-purple-950/20 rounded-lg border border-purple-500/30">
+                    <p className="text-sm text-muted-foreground">Badge Level</p>
+                    <p className="text-lg font-semibold text-purple-400">{ecoPoints.badge_level}</p>
+                  </div>
+                </div>
+                <div className="p-4 bg-emerald-950/20 rounded-lg border border-emerald-500/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-muted-foreground">Streak Days</p>
+                    <p className="text-2xl font-bold text-emerald-400">{ecoPoints.streak_days}</p>
+                  </div>
+                  <Progress value={(ecoPoints.streak_days % 7) * (100 / 7)} className="h-2" />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {7 - (ecoPoints.streak_days % 7)} days to next milestone
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {recentAchievements.length > 0 && (
+              <Card className="bg-card/50 backdrop-blur border-yellow-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Award className="h-5 w-5 text-yellow-500" />
+                    Recent Achievements
+                  </CardTitle>
+                  <CardDescription>Your latest milestones</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {recentAchievements.map((achievement) => (
+                      <div 
+                        key={achievement.id}
+                        className="p-3 bg-yellow-950/20 rounded-lg border border-yellow-500/30"
+                      >
+                        <div className="flex items-start gap-3">
+                          <Award className="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-yellow-400">{achievement.title}</p>
+                            <p className="text-sm text-muted-foreground mt-1">{achievement.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(achievement.earned_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
         {/* Historical Policies */}
         {policies.length > 0 && (
           <Card className="bg-card/50 backdrop-blur">
@@ -395,10 +647,24 @@ export default function Agentverse() {
                       setDtRun(policy.dt_runs?.[0]);
                     }}
                   >
-                    <p className="text-sm font-medium">{policy.rationale}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {new Date(policy.created_at).toLocaleDateString()} • {policy.interventions?.length || 0} interventions
-                    </p>
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium">{policy.rationale}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(policy.created_at).toLocaleDateString()} • {policy.interventions?.length || 0} interventions
+                        </p>
+                      </div>
+                      {policy.dt_runs?.[0] && (
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-sm font-semibold text-emerald-400">
+                            {policy.dt_runs[0].total_kg} kg CO₂
+                          </p>
+                          <p className="text-xs text-blue-400">
+                            {policy.dt_runs[0].total_water_kl} kL H₂O
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
