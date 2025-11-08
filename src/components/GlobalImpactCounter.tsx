@@ -17,7 +17,7 @@ const GlobalImpactCounter = () => {
       const { data, error } = await supabase
         .from('global_impact')
         .select('*')
-        .single();
+        .maybeSingle();
 
       if (data && !error) {
         setImpact(data);
