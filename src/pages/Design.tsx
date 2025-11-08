@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, Mic, MicOff, X, Send, Volume2, Home } from "lucide-react";
+import { Lightbulb, Mic, MicOff, X, Send, Volume2, Home, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -169,16 +169,27 @@ const Design = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)]">
         <Card className="relative h-full flex flex-col rounded-2xl shadow-lg border-primary/20">
-          {/* Close Button */}
-          <Button
-            onClick={handleClose}
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-4 z-10 rounded-full bg-black/60 hover:bg-black/80 text-white"
-            aria-label="Close chat"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+          {/* Top Right Actions */}
+          <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
+            <Button
+              onClick={() => navigate('/bills')}
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-black/60 hover:bg-black/80 text-white"
+              aria-label="Go to Bills"
+            >
+              <FileText className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-black/60 hover:bg-black/80 text-white"
+              aria-label="Close chat"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
 
           {/* Header */}
           <div className="flex items-center gap-3 p-6 border-b border-border">
