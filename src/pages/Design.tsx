@@ -261,7 +261,7 @@ const Design = () => {
           <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-neon-yellow/20 to-info/20 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '2s' }} />
         </div>
         
-        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 glass-card overflow-hidden">
+        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 border-animate neon-glow overflow-hidden">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
@@ -286,11 +286,12 @@ const Design = () => {
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl">
-            <div className="p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
+          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/3 to-primary/5" />
+            <div className="relative p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
               <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
             </div>
-            <div>
+            <div className="relative">
               <h1 className="text-2xl font-bold text-primary">
                 Eco Design Advisor
               </h1>
@@ -392,7 +393,7 @@ const Design = () => {
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl glass-input text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-300 focus:scale-[1.01] placeholder:text-muted-foreground/50 bg-card/80 text-foreground"
+                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl border-animate text-sm resize-none focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 focus:scale-[1.01] focus:neon-glow placeholder:text-muted-foreground/50"
                   rows={1}
                 />
               </div>
