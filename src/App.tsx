@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import Agentverse from "./pages/Agentverse";
 import HousePlanning from "./pages/HousePlanning";
 import Impact from "./pages/Impact";
+import Predict from "./pages/Predict";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/predict" element={<Predict />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/analytics" element={<Analytics />} />
