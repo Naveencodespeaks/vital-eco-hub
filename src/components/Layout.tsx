@@ -55,15 +55,15 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   const navItems = [
+    { path: "/design", icon: Sparkles, label: "Design" },
+    { path: "/house-planning", icon: Home, label: "House Plan" },
     { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/chat", icon: MessageSquare, label: "Chat" },
-    { path: "/house-planning", icon: Home, label: "House Plan" },
     { path: "/analytics", icon: BarChart3, label: "Analytics" },
     { path: "/bills", icon: FileText, label: "Bills" },
     { path: "/challenges", icon: Target, label: "Challenges" },
     { path: "/achievements", icon: Trophy, label: "Achievements" },
     { path: "/image-analyzer", icon: Sparkles, label: "Analyzer" },
-    { path: "/design", icon: Sparkles, label: "Design" },
     { path: "/settings", icon: Settings, label: "Settings" },
   ];
 
