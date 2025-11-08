@@ -92,21 +92,21 @@ const Layout = ({ children }: LayoutProps) => {
                       variant="ghost"
                       className={`flex items-center space-x-2 rounded-2xl transition-all duration-300 hover:scale-105 border-0 group relative overflow-hidden ${
                         isActive 
-                          ? 'border-animate-slow neon-glow' 
-                          : 'border-animate hover:neon-glow'
+                          ? 'bg-primary/20 text-primary shadow-lg' 
+                          : 'glass hover:bg-primary/10'
                       }`}
                     >
                       <div className={`p-1.5 rounded-xl transition-all duration-300 ${
                         isActive 
-                          ? 'border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast shadow-md' 
+                          ? 'bg-gradient-to-br from-primary to-primary/80 shadow-md' 
                           : 'glass group-hover:bg-primary/10'
                       }`}>
                         <Icon className={`w-4 h-4 transition-all duration-300 group-hover:scale-110 ${
-                          isActive ? 'text-primary-foreground drop-shadow-lg animate-pulse' : 'text-foreground/70 group-hover:text-primary'
+                          isActive ? 'text-primary-foreground drop-shadow-lg' : 'text-foreground/70 group-hover:text-primary'
                         }`} />
                       </div>
                       <span className={`font-medium transition-all duration-300 ${
-                        isActive ? 'bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent' : 'text-foreground/80 group-hover:text-foreground'
+                        isActive ? 'text-primary' : 'text-foreground/80 group-hover:text-foreground'
                       }`}>{item.label}</span>
                     </Button>
                   </Link>
