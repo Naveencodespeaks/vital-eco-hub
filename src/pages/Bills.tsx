@@ -248,7 +248,7 @@ export default function Bills() {
                         <FileText className="h-5 w-5 text-primary" />
                         {bill.month}
                       </span>
-                      <span className="text-2xl font-bold">${bill.total_amount}</span>
+                      <span className="text-2xl font-bold">₹{bill.total_amount}</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">

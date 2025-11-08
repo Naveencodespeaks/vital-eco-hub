@@ -56,7 +56,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are an expert at analyzing utility bills. Extract energy cost, water cost, energy usage (kWh), water usage (liters/gallons), and provide a concise actionable summary in 80 words or less. Return as JSON: { "energy_cost": number, "water_cost": number, "energy_usage": number, "water_usage": number, "ai_summary": string }'
+            content: 'You are an expert at analyzing Indian utility bills. Extract energy cost, water cost (in Indian Rupees ₹), energy usage (kWh), water usage (liters), and provide a concise actionable summary in 80 words or less. All monetary values should be in Indian Rupees (INR). Return as JSON: { "energy_cost": number, "water_cost": number, "energy_usage": number, "water_usage": number, "ai_summary": string }'
           },
           {
             role: 'user',
