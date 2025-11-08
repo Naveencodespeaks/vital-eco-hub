@@ -190,13 +190,13 @@ const Design = () => {
     <Layout>
       {/* Welcome Dialog */}
       <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
-        <DialogContent className="sm:max-w-md glass-card border-0 rounded-3xl shadow-2xl">
+        <DialogContent className="sm:max-w-md border-animate-slow neon-glow rounded-3xl shadow-2xl">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-2xl animate-gradient animate-pulse-slow shadow-xl glass-button">
+              <div className="p-3 border-animate-fast rounded-2xl animate-pulse-slow shadow-xl neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast">
                 <Sparkles className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
               </div>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
                 Welcome to Eco Design Advisor!
               </DialogTitle>
             </div>
@@ -244,7 +244,7 @@ const Design = () => {
           <div className="flex justify-end gap-2 pt-4">
             <Button 
               onClick={handleCloseWelcome} 
-              className="w-full h-12 bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient glass-button border-0 font-semibold rounded-2xl"
+              className="w-full h-12 border-animate-slow neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient-fast border-0 font-semibold rounded-2xl"
             >
               Got it, let's start!
             </Button>
@@ -253,14 +253,15 @@ const Design = () => {
       </Dialog>
 
       <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)] relative">
-        {/* iOS-style animated background with blur */}
+        {/* Crazy animated background with multiple blur orbs */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-info/10 to-eco-accent/10 animate-gradient" />
-          <div className="absolute top-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-info/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute inset-0 bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-neon-cyan/20 via-neon-pink/20 to-neon-purple/20 animate-gradient-fast" />
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/30 to-neon-cyan/30 rounded-full blur-3xl animate-float neon-glow" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-neon-pink/30 to-neon-purple/30 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-neon-yellow/20 to-info/20 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '2s' }} />
         </div>
         
-        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 glass-card overflow-hidden">
+        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 border-animate neon-glow overflow-hidden">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
@@ -285,15 +286,16 @@ const Design = () => {
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl">
-            <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-2xl animate-gradient animate-pulse-slow shadow-lg">
-              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
+          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-neon-cyan/5 to-neon-pink/5 animate-gradient-fast" />
+            <div className="relative p-3 border-animate-fast rounded-2xl animate-pulse-slow shadow-lg neon-glow bg-gradient-to-br from-primary via-neon-cyan to-neon-pink animate-gradient-fast">
+              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg animate-pulse" />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+            <div className="relative">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
                 Eco Design Advisor
               </h1>
-              <p className="text-sm text-muted-foreground/80">AI-powered sustainable design chat</p>
+              <p className="text-sm bg-gradient-to-r from-muted-foreground to-foreground bg-clip-text text-transparent">AI-powered sustainable design chat</p>
             </div>
           </div>
 
@@ -302,13 +304,13 @@ const Design = () => {
             <div className="space-y-4">
               {messages.length === 0 && (
                 <div className="text-center text-muted-foreground py-12">
-                  <div className="p-6 bg-gradient-to-br from-primary via-eco-accent to-info rounded-3xl mx-auto w-fit animate-gradient animate-float shadow-2xl glass-card">
-                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl" />
+                  <div className="p-6 border-animate-slow rounded-3xl mx-auto w-fit animate-float shadow-2xl neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast">
+                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl animate-pulse" />
                   </div>
-                  <p className="text-xl mt-6 font-semibold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+                  <p className="text-xl mt-6 font-semibold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
                     Start a conversation about sustainable design
                   </p>
-                  <p className="text-sm mt-3 text-muted-foreground/70">Use text or voice input below</p>
+                  <p className="text-sm mt-3 bg-gradient-to-r from-muted-foreground to-foreground bg-clip-text text-transparent">Use text or voice input below</p>
                 </div>
               )}
               
@@ -320,8 +322,8 @@ const Design = () => {
                   <div
                     className={`max-w-[80%] rounded-3xl px-5 py-4 shadow-xl transition-all duration-300 hover:scale-[1.02] ${
                       message.role === 'user'
-                        ? 'bg-gradient-to-br from-primary via-eco-accent to-info text-primary-foreground animate-gradient glass-button border-0'
-                        : 'glass-card border-border/20'
+                        ? 'border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple text-primary-foreground animate-gradient-fast'
+                        : 'border-animate glass-card'
                     }`}
                   >
                     <p className={`text-sm whitespace-pre-wrap break-words leading-relaxed ${message.role === 'user' ? 'font-medium drop-shadow-sm' : 'text-foreground/90'}`}>
@@ -355,10 +357,10 @@ const Design = () => {
             <div className="px-6 py-4 border-t border-border/20 glass backdrop-blur-2xl">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient glass-button border-0 h-12 rounded-2xl font-semibold"
+                className="w-full border-animate-slow neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient-fast border-0 h-12 rounded-2xl font-semibold"
                 variant="default"
               >
-                <Home className="mr-2 h-5 w-5 drop-shadow-lg" />
+                <Home className="mr-2 h-5 w-5 drop-shadow-lg animate-pulse" />
                 Generate House Blueprint
               </Button>
             </div>
@@ -367,13 +369,13 @@ const Design = () => {
           {/* Sample Prompts */}
           {messages.length === 0 && (
             <div className="px-6 pb-6 glass border-t border-border/20 backdrop-blur-2xl">
-              <p className="text-sm text-muted-foreground/80 mb-3 mt-4 font-medium">💚 Sample Questions:</p>
+              <p className="text-sm bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent mb-3 mt-4 font-semibold animate-gradient-fast">💚 Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-4 py-2 rounded-2xl glass hover:scale-105 text-foreground/90 transition-all duration-300 hover:shadow-lg border-border/20 hover:bg-primary/5"
+                    className="text-xs px-4 py-2 rounded-2xl border-animate hover:scale-105 text-foreground/90 transition-all duration-300 hover:neon-glow"
                   >
                     {sample}
                   </button>
@@ -391,7 +393,7 @@ const Design = () => {
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl glass-input text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-300 focus:scale-[1.01] placeholder:text-muted-foreground/50"
+                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl border-animate text-sm resize-none focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 focus:scale-[1.01] focus:neon-glow placeholder:text-muted-foreground/50"
                   rows={1}
                 />
               </div>
@@ -400,8 +402,8 @@ const Design = () => {
                 onClick={isRecording ? stopRecording : startRecording}
                 variant="outline"
                 size="icon"
-                className={`h-[56px] w-[56px] rounded-2xl glass hover:scale-105 transition-all duration-300 border-0 ${
-                  isRecording ? 'bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground animate-pulse shadow-xl glass-button' : 'hover:bg-primary/10'
+                className={`h-[56px] w-[56px] rounded-2xl hover:scale-105 transition-all duration-300 border-0 ${
+                  isRecording ? 'border-animate-fast neon-glow bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground animate-pulse shadow-xl' : 'border-animate hover:neon-glow'
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
@@ -416,7 +418,7 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[56px] w-[56px] rounded-2xl bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-gradient glass-button border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-[56px] w-[56px] rounded-2xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-gradient-fast border-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Send message"
               >
                 <Send className="h-5 w-5 drop-shadow-lg" />

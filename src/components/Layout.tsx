@@ -63,21 +63,23 @@ const Layout = ({ children }: LayoutProps) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-eco-light/30 relative overflow-hidden">
-      {/* Animated background blurs */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Crazy animated background with multiple orbs */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-info/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+        <div className="absolute inset-0 bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-neon-cyan/20 via-neon-pink/20 to-neon-purple/20 animate-gradient-fast" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary/30 to-neon-cyan/30 rounded-full blur-3xl animate-float neon-glow" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-neon-pink/30 to-neon-purple/30 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/3 right-1/3 w-96 h-96 bg-gradient-to-br from-neon-yellow/20 to-info/20 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '2s' }} />
       </div>
 
-      <nav className="glass backdrop-blur-2xl border-b border-border/20 sticky top-0 z-50 transition-all duration-500">
+      <nav className="glass backdrop-blur-2xl border-b-0 sticky top-0 z-50 transition-all duration-500 border-animate-fast neon-glow">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link to="/design" className="flex items-center space-x-3 group">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary via-eco-accent to-info flex items-center justify-center glass-button shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl animate-gradient">
-                <Leaf className="w-6 h-6 text-primary-foreground drop-shadow-lg transition-transform group-hover:rotate-12" />
+              <div className="w-11 h-11 rounded-2xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl animate-gradient-fast">
+                <Leaf className="w-6 h-6 text-primary-foreground drop-shadow-lg transition-transform group-hover:rotate-12 animate-pulse" />
               </div>
-              <span className="font-bold text-xl bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">EcoPulse AI</span>
+              <span className="font-bold text-xl bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">EcoPulse AI</span>
             </Link>
 
             <div className="hidden md:flex items-center space-x-2">
@@ -88,27 +90,24 @@ const Layout = ({ children }: LayoutProps) => {
                   <Link key={item.path} to={item.path}>
                     <Button
                       variant="ghost"
-                      className={`flex items-center space-x-2 rounded-2xl glass transition-all duration-300 hover:scale-105 border-0 group relative overflow-hidden ${
+                      className={`flex items-center space-x-2 rounded-2xl transition-all duration-300 hover:scale-105 border-0 group relative overflow-hidden ${
                         isActive 
-                          ? 'bg-gradient-to-br from-primary/20 to-primary/10 text-primary shadow-lg' 
-                          : 'hover:bg-primary/5'
+                          ? 'border-animate-slow neon-glow' 
+                          : 'border-animate hover:neon-glow'
                       }`}
                     >
                       <div className={`p-1.5 rounded-xl transition-all duration-300 ${
                         isActive 
-                          ? 'bg-gradient-to-br from-primary via-eco-accent to-info glass-button shadow-md' 
+                          ? 'border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast shadow-md' 
                           : 'glass group-hover:bg-primary/10'
                       }`}>
                         <Icon className={`w-4 h-4 transition-all duration-300 group-hover:scale-110 ${
-                          isActive ? 'text-primary-foreground drop-shadow-lg' : 'text-foreground/70 group-hover:text-primary'
+                          isActive ? 'text-primary-foreground drop-shadow-lg animate-pulse' : 'text-foreground/70 group-hover:text-primary'
                         }`} />
                       </div>
                       <span className={`font-medium transition-all duration-300 ${
-                        isActive ? 'text-primary' : 'text-foreground/80 group-hover:text-foreground'
+                        isActive ? 'bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent' : 'text-foreground/80 group-hover:text-foreground'
                       }`}>{item.label}</span>
-                      {isActive && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-eco-accent to-info animate-gradient" />
-                      )}
                     </Button>
                   </Link>
                 );
@@ -116,14 +115,14 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="glass rounded-2xl p-1 hover:scale-105 transition-all duration-300">
+              <div className="border-animate rounded-2xl p-1 hover:scale-105 transition-all duration-300 hover:neon-glow">
                 <Bell />
               </div>
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={handleSignOut}
-                className="glass rounded-2xl hover:scale-105 hover:bg-destructive/10 transition-all duration-300 border-0 group"
+                className="border-animate rounded-2xl hover:scale-105 hover:bg-destructive/10 transition-all duration-300 border-0 group hover:neon-glow"
               >
                 <LogOut className="w-5 h-5 text-foreground/70 group-hover:text-destructive transition-colors" />
               </Button>
@@ -137,13 +136,13 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Floating Chat Button */}
       <Link 
         to="/chat"
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40 w-16 h-16 rounded-3xl bg-gradient-to-br from-primary via-eco-accent to-info text-primary-foreground glass-button shadow-2xl hover:shadow-glow transition-all duration-300 hover:scale-110 flex items-center justify-center group animate-gradient animate-float"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40 w-16 h-16 rounded-3xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple text-primary-foreground shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center group animate-gradient-fast animate-float"
       >
-        <MessagesSquare className="w-7 h-7 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+        <MessagesSquare className="w-7 h-7 drop-shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse" />
       </Link>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass backdrop-blur-2xl border-t border-border/20 z-50 shadow-2xl">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass backdrop-blur-2xl border-t-0 z-50 shadow-2xl border-animate-slow neon-glow">
         <div className="flex items-center justify-around py-3 px-2">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -156,15 +155,15 @@ const Layout = ({ children }: LayoutProps) => {
               >
                 <div className={`p-2 rounded-2xl transition-all duration-300 ${
                   isActive 
-                    ? 'bg-gradient-to-br from-primary via-eco-accent to-info glass-button shadow-lg animate-gradient' 
-                    : 'glass group-hover:bg-primary/10'
+                    ? 'border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast shadow-lg' 
+                    : 'glass group-hover:bg-primary/10 group-hover:border-animate'
                 }`}>
                   <Icon className={`w-5 h-5 transition-all duration-300 group-hover:scale-110 ${
-                    isActive ? 'text-primary-foreground drop-shadow-lg' : 'text-muted-foreground group-hover:text-primary'
+                    isActive ? 'text-primary-foreground drop-shadow-lg animate-pulse' : 'text-muted-foreground group-hover:text-primary'
                   }`} />
                 </div>
                 <span className={`text-xs mt-1.5 font-medium transition-all duration-300 ${
-                  isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
+                  isActive ? 'bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent' : 'text-muted-foreground group-hover:text-foreground'
                 }`}>
                   {item.label}
                 </span>

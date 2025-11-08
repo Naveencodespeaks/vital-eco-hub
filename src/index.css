@@ -59,6 +59,11 @@ All colors MUST be HSL.
     --warning-light: 38 30% 95%;
     --warning-border: 38 92% 50%;
     
+    --neon-cyan: 180 100% 50%;
+    --neon-pink: 330 100% 60%;
+    --neon-yellow: 60 100% 60%;
+    --neon-purple: 270 100% 60%;
+    
     --chart-1: 142 76% 36%;
     --chart-2: 173 80% 40%;
     --chart-3: 199 89% 48%;
@@ -70,6 +75,8 @@ All colors MUST be HSL.
     --gradient-subtle: linear-gradient(180deg, hsl(210 20% 98%), hsl(142 30% 98%));
     --gradient-hero: linear-gradient(135deg, hsl(142 76% 36%), hsl(173 80% 40%), hsl(199 89% 48%));
     --gradient-glass: linear-gradient(135deg, hsl(142 76% 36% / 0.15), hsl(173 80% 40% / 0.1));
+    --gradient-crazy: linear-gradient(135deg, hsl(142 76% 36%), hsl(180 100% 50%), hsl(330 100% 60%), hsl(270 100% 60%));
+    --gradient-neon: linear-gradient(90deg, hsl(180 100% 50%), hsl(330 100% 60%), hsl(60 100% 60%), hsl(270 100% 60%));
     
     --shadow-eco: 0 10px 30px -10px hsl(142 76% 36% / 0.3);
     --shadow-card: 0 2px 8px -2px hsl(142 76% 36% / 0.1);
@@ -206,12 +213,95 @@ All colors MUST be HSL.
     box-shadow: 0 4px 16px 0 hsl(var(--primary) / 0.2), inset 0 1px 0 0 hsl(0 0% 100% / 0.2);
   }
   
+  /* Animated Border Utilities */
+  .border-animate {
+    position: relative;
+    background: linear-gradient(135deg, hsl(var(--card) / 0.8), hsl(var(--card) / 0.6));
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+  }
+  
+  .border-animate::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(90deg, 
+      hsl(var(--primary)), 
+      hsl(var(--neon-cyan)), 
+      hsl(var(--neon-pink)), 
+      hsl(var(--neon-yellow)),
+      hsl(var(--neon-purple)),
+      hsl(var(--primary))
+    );
+    background-size: 300% 100%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-flow 4s linear infinite;
+    z-index: -1;
+  }
+  
+  .border-animate-slow::before {
+    animation: border-flow 8s linear infinite;
+  }
+  
+  .border-animate-fast::before {
+    animation: border-flow 2s linear infinite;
+  }
+  
+  @keyframes border-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+  
+  /* Neon glow effect */
+  .neon-glow {
+    box-shadow: 
+      0 0 10px hsl(var(--primary) / 0.5),
+      0 0 20px hsl(var(--neon-cyan) / 0.4),
+      0 0 40px hsl(var(--neon-pink) / 0.3),
+      0 0 80px hsl(var(--neon-purple) / 0.2);
+    animation: neon-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes neon-pulse {
+    0%, 100% { 
+      box-shadow: 
+        0 0 10px hsl(var(--primary) / 0.5),
+        0 0 20px hsl(var(--neon-cyan) / 0.4),
+        0 0 40px hsl(var(--neon-pink) / 0.3),
+        0 0 80px hsl(var(--neon-purple) / 0.2);
+    }
+    50% { 
+      box-shadow: 
+        0 0 20px hsl(var(--primary) / 0.6),
+        0 0 30px hsl(var(--neon-cyan) / 0.5),
+        0 0 60px hsl(var(--neon-pink) / 0.4),
+        0 0 100px hsl(var(--neon-purple) / 0.3);
+    }
+  }
+  
   .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
+    background-size: 400% 400%;
+    animation: gradient 6s ease infinite;
   }
   
   @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 25%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 75%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .animate-gradient-fast {
+    background-size: 300% 300%;
+    animation: gradient-fast 3s ease infinite;
+  }
+  
+  @keyframes gradient-fast {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
