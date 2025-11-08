@@ -9,8 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
 import Analytics from "./pages/Analytics";
 import Bills from "./pages/Bills";
-import Leaderboard from "./pages/Leaderboard";
-import Teams from "./pages/Teams";
+import ImageAnalyzer from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
 import Design from "./pages/Design";
 import AboutAI from "./pages/AboutAI";
@@ -34,8 +33,7 @@ const App = () => (
           <Route path="/chat" element={<Chat />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/bills" element={<Bills />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/teams" element={<Teams />} />
+          <Route path="/image-analyzer" element={<ImageAnalyzer />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/voice" element={<Voice />} />

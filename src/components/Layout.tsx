@@ -62,8 +62,7 @@ const Layout = ({ children }: LayoutProps) => {
     { path: "/bills", icon: FileText, label: "Bills" },
     { path: "/challenges", icon: Target, label: "Challenges" },
     { path: "/achievements", icon: Trophy, label: "Achievements" },
-    { path: "/leaderboard", icon: Trophy, label: "Leaderboard" },
-    { path: "/teams", icon: Users, label: "Teams" },
+    { path: "/image-analyzer", icon: Sparkles, label: "Analyzer" },
     { path: "/design", icon: Sparkles, label: "Design" },
     { path: "/settings", icon: Settings, label: "Settings" },
   ];

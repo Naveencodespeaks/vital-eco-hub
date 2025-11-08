@@ -1,154 +1,193 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Upload, Image as ImageIcon, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Trophy, Award, TrendingUp } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import PointsBadge from "@/components/points/PointsBadge";
 
-export default function Leaderboard() {
-  const { data: topUsers } = useQuery({
-    queryKey: ['leaderboard'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('eco_points')
-        .select('*')
-        .order('points', { ascending: false })
-        .limit(50);
+export default function ImageAnalyzer() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [analyzing, setAnalyzing] = useState(false);
+  const [result, setResult] = useState<string>("");
+  const { toast } = useToast();
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 20 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Maximum file size is 20MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    setResult("");
+  };
+
+  const handleAnalyze = async () => {
+    if (!selectedFile) return;
+
+    setAnalyzing(true);
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
       
-      if (error) throw error;
+      reader.onload = async () => {
+        const base64Image = reader.result as string;
 
-      // Fetch profiles separately
-      const userIds = data?.map(ep => ep.user_id) || [];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, name, email, eco_score')
-        .in('id', userIds);
+        const lovableApiKey = import.meta.env.VITE_LOVABLE_API_KEY;
+        
+        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  {
+                    type: 'text',
+                    text: 'Analyze this image in detail. Describe what you see, identify objects, colors, composition, and any notable features. Provide a comprehensive analysis.'
+                  },
+                  {
+                    type: 'image_url',
+                    image_url: { url: base64Image }
+                  }
+                ]
+              }
+            ],
+          }),
+        });
 
-      // Merge data
-      return data?.map(ep => ({
-        ...ep,
-        profile: profiles?.find(p => p.id === ep.user_id)
-      }));
+        if (!response.ok) {
+          throw new Error('Failed to analyze image');
+        }
+
+        const data = await response.json();
+        const analysis = data.choices?.[0]?.message?.content || 'No analysis available';
+        
+        setResult(analysis);
+        toast({
+          title: "Analysis complete",
+          description: "Image has been analyzed successfully"
+        });
+      };
+    } catch (error: any) {
+      console.error('Analysis error:', error);
+      toast({
+        title: "Analysis failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setAnalyzing(false);
     }
-  });
-
-  const { data: myRank } = useQuery({
-    queryKey: ['my-rank'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
-
-      const { data: myPoints } = await supabase
-        .from('eco_points')
-        .select('points')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!myPoints) return null;
-
-      const { count } = await supabase
-        .from('eco_points')
-        .select('*', { count: 'exact', head: true })
-        .gt('points', myPoints.points);
-
-      return { rank: (count || 0) + 1, points: myPoints.points };
-    }
-  });
+  };
 
   return (
     <Layout>
-      <div className="container mx-auto p-6 space-y-8">
+      <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
         <div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">EcoPulse Leaderboard</h1>
-          <p className="text-muted-foreground">See how you rank among sustainability champions</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">AI Image Analyzer</h1>
+          <p className="text-muted-foreground">Upload an image to get detailed AI-powered analysis</p>
         </div>
 
-        {/* Personal Stats */}
-        {myRank && (
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
-                Your Ranking
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Global Rank</p>
-                <p className="text-3xl font-bold text-primary">#{myRank.rank}</p>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ImageIcon className="h-5 w-5 text-primary" />
+              Upload Image
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="image-upload">Select an image (max 20MB)</Label>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="outline"
+                  className="relative"
+                  onClick={() => document.getElementById('image-upload')?.click()}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Choose File
+                </Button>
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
+                {selectedFile && (
+                  <span className="text-sm text-muted-foreground">{selectedFile.name}</span>
+                )}
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">EcoPoints</p>
-                <p className="text-3xl font-bold text-primary">{myRank.points}</p>
+            </div>
+
+            {previewUrl && (
+              <div className="border border-border rounded-lg p-4">
+                <img 
+                  src={previewUrl} 
+                  alt="Preview" 
+                  className="max-w-full h-auto rounded-md mx-auto max-h-96 object-contain"
+                />
+              </div>
+            )}
+
+            <Button 
+              onClick={handleAnalyze}
+              disabled={!selectedFile || analyzing}
+              className="w-full"
+            >
+              {analyzing ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <ImageIcon className="h-4 w-4 mr-2" />
+                  Analyze Image
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {result && (
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+            <CardHeader>
+              <CardTitle>Analysis Result</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose prose-sm max-w-none">
+                <p className="text-foreground whitespace-pre-wrap">{result}</p>
               </div>
             </CardContent>
           </Card>
         )}
-
-        {/* Top Users */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-primary" />
-            Top Sustainability Champions
-          </h2>
-
-          <div className="space-y-3">
-            {topUsers?.map((entry, index) => (
-              <Card 
-                key={entry.id} 
-                className={`${
-                  index < 3 
-                    ? 'border-primary/30 bg-gradient-to-r from-primary/5 to-transparent' 
-                    : ''
-                }`}
-              >
-                <CardContent className="flex items-center justify-between p-4">
-                  <div className="flex items-center gap-4 flex-1">
-                    <div className={`text-2xl font-bold ${
-                      index === 0 ? 'text-yellow-500' :
-                      index === 1 ? 'text-gray-400' :
-                      index === 2 ? 'text-orange-600' :
-                      'text-muted-foreground'
-                    }`}>
-                      #{index + 1}
-                    </div>
-                    
-                    <div className="flex-1">
-                      <p className="font-semibold text-foreground">{entry.profile?.name || 'Unknown'}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <PointsBadge level={entry.badge_level} />
-                        {entry.streak_days > 0 && (
-                          <Badge variant="outline" className="text-xs">
-                            <TrendingUp className="h-3 w-3 mr-1" />
-                            {entry.streak_days} day streak
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-right space-y-1">
-                    <p className="text-2xl font-bold text-primary">{entry.points}</p>
-                    <p className="text-xs text-muted-foreground">
-                      EcoScore: {entry.profile?.eco_score || 0}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {(!topUsers || topUsers.length === 0) && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                <Trophy className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-lg font-medium text-foreground">No rankings yet</p>
-                <p className="text-sm text-muted-foreground">Be the first to earn EcoPoints!</p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
       </div>
     </Layout>
   );
