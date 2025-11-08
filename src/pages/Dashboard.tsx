@@ -9,6 +9,7 @@ import { Zap, Droplets, Cloud, TrendingDown, Sparkles } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Layout from "@/components/Layout";
 import ForecastChart from "@/components/dashboard/ForecastChart";
+import Spline from '@splinetool/react-spline';
 
 const Dashboard = () => {
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -176,6 +177,18 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* 3D Visualization */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Interactive 3D Environment</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="w-full h-[400px] rounded-lg overflow-hidden">
+              <Spline scene="https://prod.spline.design/WsvBT7QuIUQRJ2gi/scene.splinecode" />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Charts */}
         <div className="grid gap-4 lg:grid-cols-2">
