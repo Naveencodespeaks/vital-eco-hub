@@ -12,7 +12,7 @@ const Index = () => {
     // Check if user is logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard");
+        navigate("/design");
       }
     });
   }, [navigate]);
