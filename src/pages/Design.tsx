@@ -4,9 +4,16 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, Mic, MicOff, X, Send, Volume2, Home, FileText } from "lucide-react";
+import { Lightbulb, Mic, MicOff, X, Send, Volume2, Home, FileText, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -19,9 +26,23 @@ const Design = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if user has seen the welcome message
+    const hasSeenWelcome = localStorage.getItem('design_welcome_seen');
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+    }
+  }, []);
+
+  const handleCloseWelcome = () => {
+    localStorage.setItem('design_welcome_seen', 'true');
+    setShowWelcome(false);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -167,6 +188,65 @@ const Design = () => {
 
   return (
     <Layout>
+      {/* Welcome Dialog */}
+      <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-2 bg-gradient-to-br from-primary to-primary/70 rounded-lg">
+                <Sparkles className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <DialogTitle className="text-2xl">Welcome to Eco Design Advisor!</DialogTitle>
+            </div>
+            <DialogDescription className="text-left space-y-4 pt-4">
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                    1
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">Ask Anything</p>
+                    <p className="text-sm text-muted-foreground">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                    2
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">Use Voice Input</p>
+                    <p className="text-sm text-muted-foreground">Click the microphone icon to speak your questions instead of typing.</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                    3
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">Generate Blueprints</p>
+                    <p className="text-sm text-muted-foreground">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Lightbulb className="h-3 w-3" />
+                  Try the sample questions below to get started!
+                </p>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button onClick={handleCloseWelcome} className="w-full">
+              Got it, let's start!
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)]">
         <Card className="relative h-full flex flex-col rounded-2xl shadow-lg border-primary/20">
           {/* Top Right Actions */}
