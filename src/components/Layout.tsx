@@ -58,7 +58,6 @@ const Layout = ({ children }: LayoutProps) => {
     { path: "/design", icon: Sparkles, label: "Design" },
     { path: "/house-planning", icon: Home, label: "House Plan" },
     { path: "/predict", icon: TrendingUp, label: "Predict" },
-    { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/settings", icon: Settings, label: "Settings" },
   ];
 
