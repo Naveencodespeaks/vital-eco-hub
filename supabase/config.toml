@@ -3,6 +3,9 @@ project_id = "acfnikpwzavprxkyqqqk"
 [functions.predict]
 verify_jwt = true
 
+[functions.generate_blueprint]
+verify_jwt = true
+
 [functions.analyze_bill]
 verify_jwt = true
 

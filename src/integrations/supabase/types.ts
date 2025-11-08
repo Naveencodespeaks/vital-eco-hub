@@ -112,6 +112,57 @@ export type Database = {
           },
         ]
       }
+      blueprints: {
+        Row: {
+          ai_analysis: string | null
+          blueprint_image_url: string | null
+          created_at: string
+          energy_insights: string | null
+          facing_direction: string
+          green_features: Json
+          id: string
+          num_floors: number
+          num_rooms: number
+          plot_size: number
+          plot_unit: string
+          sustainability_score: number | null
+          user_id: string
+          vastu_rating: number | null
+        }
+        Insert: {
+          ai_analysis?: string | null
+          blueprint_image_url?: string | null
+          created_at?: string
+          energy_insights?: string | null
+          facing_direction: string
+          green_features?: Json
+          id?: string
+          num_floors?: number
+          num_rooms: number
+          plot_size: number
+          plot_unit?: string
+          sustainability_score?: number | null
+          user_id: string
+          vastu_rating?: number | null
+        }
+        Update: {
+          ai_analysis?: string | null
+          blueprint_image_url?: string | null
+          created_at?: string
+          energy_insights?: string | null
+          facing_direction?: string
+          green_features?: Json
+          id?: string
+          num_floors?: number
+          num_rooms?: number
+          plot_size?: number
+          plot_unit?: string
+          sustainability_score?: number | null
+          user_id?: string
+          vastu_rating?: number | null
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           created_at: string
