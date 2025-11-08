@@ -12,6 +12,21 @@ serve(async (req) => {
   }
 
   try {
+    // Verify secret key for batch job authentication
+    const authHeader = req.headers.get('Authorization');
+    const cronSecret = Deno.env.get('ECO_COPILOT_SECRET');
+    
+    if (!cronSecret) {
+      throw new Error('ECO_COPILOT_SECRET not configured');
+    }
+    
+    if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - Invalid or missing secret' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
