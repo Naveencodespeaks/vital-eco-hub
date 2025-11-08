@@ -190,52 +190,52 @@ const Design = () => {
     <Layout>
       {/* Welcome Dialog */}
       <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
-        <DialogContent className="sm:max-w-md glass-card border-primary/20">
+        <DialogContent className="sm:max-w-md glass-card border-0 rounded-3xl shadow-2xl">
           <DialogHeader>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 bg-gradient-to-br from-primary via-eco-accent to-info rounded-lg animate-gradient animate-pulse-slow shadow-glow">
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-2xl animate-gradient animate-pulse-slow shadow-xl glass-button">
+                <Sparkles className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
               </div>
-              <DialogTitle className="text-2xl bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
                 Welcome to Eco Design Advisor!
               </DialogTitle>
             </div>
             <DialogDescription className="text-left space-y-4 pt-4">
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
                     1
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Ask Anything</p>
-                    <p className="text-sm text-muted-foreground">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
+                    <p className="font-semibold text-foreground">Ask Anything</p>
+                    <p className="text-sm text-muted-foreground/80">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
                     2
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Use Voice Input</p>
-                    <p className="text-sm text-muted-foreground">Click the microphone icon to speak your questions instead of typing.</p>
+                    <p className="font-semibold text-foreground">Use Voice Input</p>
+                    <p className="text-sm text-muted-foreground/80">Click the microphone icon to speak your questions instead of typing.</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
                     3
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Generate Blueprints</p>
-                    <p className="text-sm text-muted-foreground">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
+                    <p className="font-semibold text-foreground">Generate Blueprints</p>
+                    <p className="text-sm text-muted-foreground/80">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Lightbulb className="h-3 w-3" />
+              <div className="pt-4 border-t border-border/20">
+                <p className="text-xs text-muted-foreground/80 flex items-center gap-1.5">
+                  <Lightbulb className="h-3.5 w-3.5 text-primary" />
                   Try the sample questions below to get started!
                 </p>
               </div>
@@ -244,7 +244,7 @@ const Design = () => {
           <div className="flex justify-end gap-2 pt-4">
             <Button 
               onClick={handleCloseWelcome} 
-              className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-105 animate-gradient"
+              className="w-full h-12 bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient glass-button border-0 font-semibold rounded-2xl"
             >
               Got it, let's start!
             </Button>
@@ -253,43 +253,47 @@ const Design = () => {
       </Dialog>
 
       <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)] relative">
-        {/* Animated background gradient */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-info/5 to-eco-accent/5 animate-gradient" />
+        {/* iOS-style animated background with blur */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-info/10 to-eco-accent/10 animate-gradient" />
+          <div className="absolute top-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-info/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+        </div>
         
-        <Card className="relative h-full flex flex-col rounded-2xl shadow-lg border-primary/20 glass-card overflow-hidden">
+        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 glass-card overflow-hidden">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
               onClick={() => navigate('/bills')}
               variant="ghost"
               size="icon"
-              className="rounded-full glass hover:scale-110 transition-all animate-float shadow-glow"
+              className="rounded-2xl glass hover:scale-105 transition-all duration-300 animate-float border-0 hover:bg-primary/10"
               aria-label="Go to Bills"
             >
-              <FileText className="h-4 w-4" />
+              <FileText className="h-4 w-4 text-primary" />
             </Button>
             <Button
               onClick={handleClose}
               variant="ghost"
               size="icon"
-              className="rounded-full glass hover:scale-110 transition-all animate-float shadow-glow"
+              className="rounded-2xl glass hover:scale-105 transition-all duration-300 animate-float border-0 hover:bg-destructive/10"
               aria-label="Close chat"
               style={{ animationDelay: '0.5s' }}
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4 text-destructive" />
             </Button>
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-3 p-6 border-b border-border/50 glass">
-            <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-xl animate-gradient animate-pulse-slow shadow-glow">
-              <Lightbulb className="h-6 w-6 text-primary-foreground" />
+          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl">
+            <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-2xl animate-gradient animate-pulse-slow shadow-lg">
+              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
                 Eco Design Advisor
               </h1>
-              <p className="text-sm text-muted-foreground">AI-powered sustainable design chat</p>
+              <p className="text-sm text-muted-foreground/80">AI-powered sustainable design chat</p>
             </div>
           </div>
 
@@ -297,14 +301,14 @@ const Design = () => {
           <ScrollArea className="flex-1 p-6 relative">
             <div className="space-y-4">
               {messages.length === 0 && (
-                <div className="text-center text-muted-foreground py-8">
-                  <div className="p-4 bg-gradient-to-br from-primary via-eco-accent to-info rounded-full mx-auto w-fit animate-gradient animate-float shadow-glow">
-                    <Lightbulb className="h-12 w-12 text-primary-foreground" />
+                <div className="text-center text-muted-foreground py-12">
+                  <div className="p-6 bg-gradient-to-br from-primary via-eco-accent to-info rounded-3xl mx-auto w-fit animate-gradient animate-float shadow-2xl glass-card">
+                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl" />
                   </div>
-                  <p className="text-lg mt-4 font-medium bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+                  <p className="text-xl mt-6 font-semibold bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
                     Start a conversation about sustainable design
                   </p>
-                  <p className="text-sm mt-2">Use text or voice input below</p>
+                  <p className="text-sm mt-3 text-muted-foreground/70">Use text or voice input below</p>
                 </div>
               )}
               
@@ -314,13 +318,13 @@ const Design = () => {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 shadow-lg transition-all hover:scale-105 ${
+                    className={`max-w-[80%] rounded-3xl px-5 py-4 shadow-xl transition-all duration-300 hover:scale-[1.02] ${
                       message.role === 'user'
-                        ? 'bg-gradient-to-br from-primary via-eco-accent to-info text-primary-foreground animate-gradient glass-card'
-                        : 'glass-card'
+                        ? 'bg-gradient-to-br from-primary via-eco-accent to-info text-primary-foreground animate-gradient glass-button border-0'
+                        : 'glass-card border-border/20'
                     }`}
                   >
-                    <p className={`text-sm whitespace-pre-wrap break-words ${message.role === 'user' ? 'font-medium' : ''}`}>
+                    <p className={`text-sm whitespace-pre-wrap break-words leading-relaxed ${message.role === 'user' ? 'font-medium drop-shadow-sm' : 'text-foreground/90'}`}>
                       {message.content}
                     </p>
                   </div>
@@ -329,14 +333,14 @@ const Design = () => {
 
               {isLoading && (
                 <div className="flex justify-start animate-fade-in">
-                  <div className="glass-card rounded-2xl px-4 py-3 shadow-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gradient-to-r from-primary to-eco-accent rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-gradient-to-r from-eco-accent to-info rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-gradient-to-r from-info to-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
+                  <div className="glass-card rounded-3xl px-5 py-4 shadow-xl border-border/20">
+                    <div className="flex items-center gap-3">
+                      <div className="flex gap-1.5">
+                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-primary to-eco-accent rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-eco-accent to-info rounded-full animate-pulse shadow-lg" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-info to-primary rounded-full animate-pulse shadow-lg" style={{ animationDelay: '300ms' }} />
                       </div>
-                      <span className="text-sm text-muted-foreground">EcoPulse is thinking...</span>
+                      <span className="text-sm text-muted-foreground/80">EcoPulse is thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -348,13 +352,13 @@ const Design = () => {
 
           {/* Generate Blueprint Button */}
           {messages.length > 0 && (
-            <div className="px-6 py-4 border-t border-border/50 glass">
+            <div className="px-6 py-4 border-t border-border/20 glass backdrop-blur-2xl">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-105 animate-gradient"
+                className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient glass-button border-0 h-12 rounded-2xl font-semibold"
                 variant="default"
               >
-                <Home className="mr-2 h-4 w-4" />
+                <Home className="mr-2 h-5 w-5 drop-shadow-lg" />
                 Generate House Blueprint
               </Button>
             </div>
@@ -362,14 +366,14 @@ const Design = () => {
 
           {/* Sample Prompts */}
           {messages.length === 0 && (
-            <div className="px-6 pb-4 glass border-t border-border/50">
-              <p className="text-sm text-muted-foreground mb-2 mt-4">💚 Sample Questions:</p>
+            <div className="px-6 pb-6 glass border-t border-border/20 backdrop-blur-2xl">
+              <p className="text-sm text-muted-foreground/80 mb-3 mt-4 font-medium">💚 Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-3 py-1.5 rounded-full glass hover:scale-105 text-foreground transition-all hover:shadow-glow"
+                    className="text-xs px-4 py-2 rounded-2xl glass hover:scale-105 text-foreground/90 transition-all duration-300 hover:shadow-lg border-border/20 hover:bg-primary/5"
                   >
                     {sample}
                   </button>
@@ -379,15 +383,15 @@ const Design = () => {
           )}
 
           {/* Input Area */}
-          <div className="p-6 border-t border-border/50 glass">
-            <div className="flex gap-2 items-end">
+          <div className="p-6 border-t border-border/20 glass backdrop-blur-2xl">
+            <div className="flex gap-3 items-end">
               <div className="flex-1">
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[50px] max-h-[120px] px-4 py-3 rounded-xl glass text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all focus:scale-105"
+                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl glass-input text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-300 focus:scale-[1.01] placeholder:text-muted-foreground/50"
                   rows={1}
                 />
               </div>
@@ -396,15 +400,15 @@ const Design = () => {
                 onClick={isRecording ? stopRecording : startRecording}
                 variant="outline"
                 size="icon"
-                className={`h-[50px] w-[50px] rounded-xl glass hover:scale-110 transition-all ${
-                  isRecording ? 'bg-gradient-to-br from-destructive to-destructive/70 text-destructive-foreground animate-pulse shadow-glow' : ''
+                className={`h-[56px] w-[56px] rounded-2xl glass hover:scale-105 transition-all duration-300 border-0 ${
+                  isRecording ? 'bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground animate-pulse shadow-xl glass-button' : 'hover:bg-primary/10'
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
                 {isRecording ? (
-                  <MicOff className="h-5 w-5" />
+                  <MicOff className="h-5 w-5 drop-shadow-lg" />
                 ) : (
-                  <Mic className="h-5 w-5" />
+                  <Mic className="h-5 w-5 text-primary" />
                 )}
               </Button>
 
@@ -412,10 +416,10 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[50px] w-[50px] rounded-xl bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-110 animate-gradient"
+                className="h-[56px] w-[56px] rounded-2xl bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-gradient glass-button border-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Send message"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-5 w-5 drop-shadow-lg" />
               </Button>
             </div>
           </div>
