@@ -60,6 +60,24 @@ export default function ImageAnalyzer() {
       reader.onload = async () => {
         const base64Image = reader.result as string;
 
+        // Upload original image to storage
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('analyzed-images')
+          .upload(fileName, selectedFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('analyzed-images')
+          .getPublicUrl(fileName);
+
+        // Analyze the image
         const { data, error } = await supabase.functions.invoke('analyze_image', {
           body: { imageData: base64Image }
         });
@@ -73,12 +91,37 @@ export default function ImageAnalyzer() {
         }
         
         setResult(data.analysis);
+        let modifiedUrl = '';
+        
         if (data.modifiedImage) {
-          setModifiedImage(data.modifiedImage);
+          // Convert base64 to blob and upload modified image
+          const modifiedBlob = await (await fetch(data.modifiedImage)).blob();
+          const modifiedFileName = `${user.id}/${Date.now()}_modified.png`;
+          
+          const { error: modUploadError } = await supabase.storage
+            .from('analyzed-images')
+            .upload(modifiedFileName, modifiedBlob);
+
+          if (!modUploadError) {
+            const { data: { publicUrl: modPublicUrl } } = supabase.storage
+              .from('analyzed-images')
+              .getPublicUrl(modifiedFileName);
+            modifiedUrl = modPublicUrl;
+            setModifiedImage(data.modifiedImage);
+          }
         }
+
+        // Save analysis record
+        await supabase.from('image_analyses').insert({
+          user_id: user.id,
+          original_image_url: publicUrl,
+          modified_image_url: modifiedUrl,
+          analysis_text: data.analysis
+        });
+
         toast({
           title: "Analysis complete",
-          description: "Image has been analyzed and enhanced successfully"
+          description: "Image has been analyzed and saved successfully"
         });
       };
     } catch (error: any) {
@@ -123,9 +166,34 @@ export default function ImageAnalyzer() {
       }
 
       setGeneratedImage(data.generatedImage);
+
+      // Upload generated image to storage
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const generatedBlob = await (await fetch(data.generatedImage)).blob();
+        const fileName = `${user.id}/${Date.now()}_generated.png`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('analyzed-images')
+          .upload(fileName, generatedBlob);
+
+        if (!uploadError) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('analyzed-images')
+            .getPublicUrl(fileName);
+
+          // Save generation record
+          await supabase.from('image_analyses').insert({
+            user_id: user.id,
+            generated_image_url: publicUrl,
+            prompt: textPrompt.trim()
+          });
+        }
+      }
+
       toast({
         title: "Image generated",
-        description: "Your image has been created successfully"
+        description: "Your image has been created and saved successfully"
       });
     } catch (error: any) {
       console.error('Generation error:', error);

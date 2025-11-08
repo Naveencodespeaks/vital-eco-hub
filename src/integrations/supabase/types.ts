@@ -258,6 +258,39 @@ export type Database = {
           },
         ]
       }
+      image_analyses: {
+        Row: {
+          analysis_text: string | null
+          created_at: string | null
+          generated_image_url: string | null
+          id: string
+          modified_image_url: string | null
+          original_image_url: string | null
+          prompt: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_text?: string | null
+          created_at?: string | null
+          generated_image_url?: string | null
+          id?: string
+          modified_image_url?: string | null
+          original_image_url?: string | null
+          prompt?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_text?: string | null
+          created_at?: string | null
+          generated_image_url?: string | null
+          id?: string
+          modified_image_url?: string | null
+          original_image_url?: string | null
+          prompt?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       metrics: {
         Row: {
           co2_emission: number
