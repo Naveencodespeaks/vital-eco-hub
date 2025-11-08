@@ -302,19 +302,6 @@ const BlueprintGenerator = () => {
                       </p>
                     </CardContent>
                   </Card>
-
-                  {result.ai_analysis && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>AI Analysis</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground whitespace-pre-line">
-                          {result.ai_analysis}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
                 </>
               )}
 
