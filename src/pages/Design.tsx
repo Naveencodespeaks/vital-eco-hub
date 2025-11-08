@@ -190,13 +190,15 @@ const Design = () => {
     <Layout>
       {/* Welcome Dialog */}
       <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md glass-card border-primary/20">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 bg-gradient-to-br from-primary to-primary/70 rounded-lg">
+              <div className="p-2 bg-gradient-to-br from-primary via-eco-accent to-info rounded-lg animate-gradient animate-pulse-slow shadow-glow">
                 <Sparkles className="h-5 w-5 text-primary-foreground" />
               </div>
-              <DialogTitle className="text-2xl">Welcome to Eco Design Advisor!</DialogTitle>
+              <DialogTitle className="text-2xl bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+                Welcome to Eco Design Advisor!
+              </DialogTitle>
             </div>
             <DialogDescription className="text-left space-y-4 pt-4">
               <div className="space-y-3">
@@ -240,22 +242,28 @@ const Design = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2 pt-4">
-            <Button onClick={handleCloseWelcome} className="w-full">
+            <Button 
+              onClick={handleCloseWelcome} 
+              className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-105 animate-gradient"
+            >
               Got it, let's start!
             </Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)]">
-        <Card className="relative h-full flex flex-col rounded-2xl shadow-lg border-primary/20">
+      <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)] relative">
+        {/* Animated background gradient */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-info/5 to-eco-accent/5 animate-gradient" />
+        
+        <Card className="relative h-full flex flex-col rounded-2xl shadow-lg border-primary/20 glass-card overflow-hidden">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
               onClick={() => navigate('/bills')}
               variant="ghost"
               size="icon"
-              className="rounded-full bg-black/60 hover:bg-black/80 text-white"
+              className="rounded-full glass hover:scale-110 transition-all animate-float shadow-glow"
               aria-label="Go to Bills"
             >
               <FileText className="h-4 w-4" />
@@ -264,31 +272,38 @@ const Design = () => {
               onClick={handleClose}
               variant="ghost"
               size="icon"
-              className="rounded-full bg-black/60 hover:bg-black/80 text-white"
+              className="rounded-full glass hover:scale-110 transition-all animate-float shadow-glow"
               aria-label="Close chat"
+              style={{ animationDelay: '0.5s' }}
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-3 p-6 border-b border-border">
-            <div className="p-3 bg-gradient-to-br from-primary to-primary/70 rounded-xl">
+          <div className="flex items-center gap-3 p-6 border-b border-border/50 glass">
+            <div className="p-3 bg-gradient-to-br from-primary via-eco-accent to-info rounded-xl animate-gradient animate-pulse-slow shadow-glow">
               <Lightbulb className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Eco Design Advisor</h1>
+              <h1 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+                Eco Design Advisor
+              </h1>
               <p className="text-sm text-muted-foreground">AI-powered sustainable design chat</p>
             </div>
           </div>
 
           {/* Chat Messages */}
-          <ScrollArea className="flex-1 p-6">
+          <ScrollArea className="flex-1 p-6 relative">
             <div className="space-y-4">
               {messages.length === 0 && (
                 <div className="text-center text-muted-foreground py-8">
-                  <Lightbulb className="h-12 w-12 mx-auto mb-4 text-primary/50" />
-                  <p className="text-lg">Start a conversation about sustainable design</p>
+                  <div className="p-4 bg-gradient-to-br from-primary via-eco-accent to-info rounded-full mx-auto w-fit animate-gradient animate-float shadow-glow">
+                    <Lightbulb className="h-12 w-12 text-primary-foreground" />
+                  </div>
+                  <p className="text-lg mt-4 font-medium bg-gradient-to-r from-primary via-eco-accent to-info bg-clip-text text-transparent animate-gradient">
+                    Start a conversation about sustainable design
+                  </p>
                   <p className="text-sm mt-2">Use text or voice input below</p>
                 </div>
               )}
@@ -299,25 +314,27 @@ const Design = () => {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 shadow-lg transition-all hover:scale-105 ${
                       message.role === 'user'
-                        ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground'
-                        : 'bg-muted text-foreground border border-border'
+                        ? 'bg-gradient-to-br from-primary via-eco-accent to-info text-primary-foreground animate-gradient glass-card'
+                        : 'glass-card'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+                    <p className={`text-sm whitespace-pre-wrap break-words ${message.role === 'user' ? 'font-medium' : ''}`}>
+                      {message.content}
+                    </p>
                   </div>
                 </div>
               ))}
 
               {isLoading && (
                 <div className="flex justify-start animate-fade-in">
-                  <div className="bg-muted text-foreground border border-border rounded-2xl px-4 py-3">
+                  <div className="glass-card rounded-2xl px-4 py-3 shadow-lg">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
+                        <div className="w-2 h-2 bg-gradient-to-r from-primary to-eco-accent rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2 h-2 bg-gradient-to-r from-eco-accent to-info rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2 h-2 bg-gradient-to-r from-info to-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
                       </div>
                       <span className="text-sm text-muted-foreground">EcoPulse is thinking...</span>
                     </div>
@@ -331,10 +348,10 @@ const Design = () => {
 
           {/* Generate Blueprint Button */}
           {messages.length > 0 && (
-            <div className="px-6 py-4 border-t border-border/50">
+            <div className="px-6 py-4 border-t border-border/50 glass">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full"
+                className="w-full bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-105 animate-gradient"
                 variant="default"
               >
                 <Home className="mr-2 h-4 w-4" />
@@ -345,14 +362,14 @@ const Design = () => {
 
           {/* Sample Prompts */}
           {messages.length === 0 && (
-            <div className="px-6 pb-4">
-              <p className="text-sm text-muted-foreground mb-2">💚 Sample Questions:</p>
+            <div className="px-6 pb-4 glass border-t border-border/50">
+              <p className="text-sm text-muted-foreground mb-2 mt-4">💚 Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-colors"
+                    className="text-xs px-3 py-1.5 rounded-full glass hover:scale-105 text-foreground transition-all hover:shadow-glow"
                   >
                     {sample}
                   </button>
@@ -362,7 +379,7 @@ const Design = () => {
           )}
 
           {/* Input Area */}
-          <div className="p-6 border-t border-border bg-background/50">
+          <div className="p-6 border-t border-border/50 glass">
             <div className="flex gap-2 items-end">
               <div className="flex-1">
                 <textarea
@@ -370,7 +387,7 @@ const Design = () => {
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[50px] max-h-[120px] px-4 py-3 rounded-xl border border-input bg-background text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="w-full min-h-[50px] max-h-[120px] px-4 py-3 rounded-xl glass text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all focus:scale-105"
                   rows={1}
                 />
               </div>
@@ -379,13 +396,13 @@ const Design = () => {
                 onClick={isRecording ? stopRecording : startRecording}
                 variant="outline"
                 size="icon"
-                className={`h-[50px] w-[50px] rounded-xl ${
-                  isRecording ? 'bg-destructive/10 border-destructive animate-pulse' : ''
+                className={`h-[50px] w-[50px] rounded-xl glass hover:scale-110 transition-all ${
+                  isRecording ? 'bg-gradient-to-br from-destructive to-destructive/70 text-destructive-foreground animate-pulse shadow-glow' : ''
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
                 {isRecording ? (
-                  <MicOff className="h-5 w-5 text-destructive" />
+                  <MicOff className="h-5 w-5" />
                 ) : (
                   <Mic className="h-5 w-5" />
                 )}
@@ -395,7 +412,7 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[50px] w-[50px] rounded-xl"
+                className="h-[50px] w-[50px] rounded-xl bg-gradient-to-br from-primary via-eco-accent to-info hover:shadow-glow transition-all hover:scale-110 animate-gradient"
                 aria-label="Send message"
               >
                 <Send className="h-5 w-5" />
