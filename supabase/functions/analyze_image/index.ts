@@ -12,15 +12,67 @@ serve(async (req) => {
   }
 
   try {
-    const { imageData } = await req.json();
+    const { imageData, textPrompt, mode } = await req.json();
     
-    if (!imageData) {
-      throw new Error('No image data provided');
-    }
-
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
     if (!lovableApiKey) {
       throw new Error('LOVABLE_API_KEY not configured');
+    }
+
+    // Handle text-to-image generation
+    if (mode === 'generate' && textPrompt) {
+      console.log('Generating image from prompt...');
+      
+      const generateResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash-image-preview',
+          messages: [
+            {
+              role: 'user',
+              content: textPrompt
+            }
+          ],
+          modalities: ['image', 'text']
+        }),
+      });
+
+      if (!generateResponse.ok) {
+        const errorText = await generateResponse.text();
+        console.error('Image generation error:', generateResponse.status, errorText);
+        
+        if (generateResponse.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        if (generateResponse.status === 402) {
+          throw new Error('AI credits depleted. Please add credits to your workspace.');
+        }
+        throw new Error(`Image generation failed: ${errorText}`);
+      }
+
+      const generateData = await generateResponse.json();
+      const generatedImage = generateData.choices?.[0]?.message?.images?.[0]?.image_url?.url || null;
+
+      if (!generatedImage) {
+        throw new Error('No image was generated');
+      }
+
+      return new Response(
+        JSON.stringify({ generatedImage }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200 
+        }
+      );
+    }
+
+    // Handle image analysis (existing functionality)
+    if (!imageData) {
+      throw new Error('No image data provided');
     }
 
     console.log('Analyzing image with Gemini...');

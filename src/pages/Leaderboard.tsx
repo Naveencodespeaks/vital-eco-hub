@@ -3,7 +3,9 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Upload, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Upload, Image as ImageIcon, Loader2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -13,6 +15,9 @@ export default function ImageAnalyzer() {
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<string>("");
   const [modifiedImage, setModifiedImage] = useState<string>("");
+  const [textPrompt, setTextPrompt] = useState<string>("");
+  const [generatedImage, setGeneratedImage] = useState<string>("");
+  const [generating, setGenerating] = useState(false);
   const { toast } = useToast();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,15 +93,68 @@ export default function ImageAnalyzer() {
     }
   };
 
+  const handleGenerate = async () => {
+    if (!textPrompt.trim()) {
+      toast({
+        title: "Prompt required",
+        description: "Please enter a description of the image you want to generate",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setGenerating(true);
+    setGeneratedImage("");
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze_image', {
+        body: { 
+          textPrompt: textPrompt.trim(),
+          mode: 'generate'
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message || 'Failed to generate image');
+      }
+
+      if (!data?.generatedImage) {
+        throw new Error('No image was generated');
+      }
+
+      setGeneratedImage(data.generatedImage);
+      toast({
+        title: "Image generated",
+        description: "Your image has been created successfully"
+      });
+    } catch (error: any) {
+      console.error('Generation error:', error);
+      toast({
+        title: "Generation failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
         <div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">AI Image Analyzer</h1>
-          <p className="text-muted-foreground">Upload an image to get detailed AI-powered analysis</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">AI Image Tools</h1>
+          <p className="text-muted-foreground">Analyze uploaded images or generate new ones from text</p>
         </div>
 
-        <Card>
+        <Tabs defaultValue="analyze" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="analyze">Analyze Image</TabsTrigger>
+            <TabsTrigger value="generate">Generate Image</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="analyze" className="space-y-6">
+            <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ImageIcon className="h-5 w-5 text-primary" />
@@ -156,9 +214,9 @@ export default function ImageAnalyzer() {
               )}
             </Button>
           </CardContent>
-        </Card>
+            </Card>
 
-        {result && (
+            {result && (
           <>
             <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
               <CardHeader>
@@ -186,9 +244,70 @@ export default function ImageAnalyzer() {
                   </div>
                 </CardContent>
               </Card>
+              )}
+            </>
+          )}
+          </TabsContent>
+
+          <TabsContent value="generate" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  Generate Image from Text
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="prompt">Describe the image you want to create</Label>
+                  <Textarea
+                    id="prompt"
+                    placeholder="A modern minimalist bedroom with industrial aesthetic, featuring exposed concrete ceiling..."
+                    value={textPrompt}
+                    onChange={(e) => setTextPrompt(e.target.value)}
+                    rows={8}
+                    className="resize-none"
+                  />
+                </div>
+
+                <Button 
+                  onClick={handleGenerate}
+                  disabled={!textPrompt.trim() || generating}
+                  className="w-full"
+                >
+                  {generating ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate Image
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {generatedImage && (
+              <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+                <CardHeader>
+                  <CardTitle>Generated Image</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="border border-border rounded-lg p-4">
+                    <img 
+                      src={generatedImage} 
+                      alt="Generated image" 
+                      className="max-w-full h-auto rounded-md mx-auto"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             )}
-          </>
-        )}
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
