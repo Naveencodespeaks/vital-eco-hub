@@ -192,75 +192,74 @@ const Design = () => {
       <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 rounded-lg bg-primary/10">
-                <Sparkles className="h-6 w-6 text-primary" />
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-2 bg-primary/10">
+                <Sparkles className="h-5 w-5 text-primary" />
               </div>
-              <DialogTitle className="text-2xl font-bold">
-                Welcome to Eco Design Advisor!
+              <DialogTitle className="text-lg font-semibold">
+                Welcome to Eco Design Advisor
               </DialogTitle>
             </div>
-            <DialogDescription className="text-left space-y-4 pt-4">
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
+            <DialogDescription className="text-left space-y-3 pt-3">
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
                     1
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">Ask Anything</p>
-                    <p className="text-sm text-muted-foreground">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
+                    <p className="font-medium text-foreground text-sm">Ask Anything</p>
+                    <p className="text-xs text-muted-foreground">Get AI-powered advice on sustainable design and energy efficiency.</p>
                   </div>
                 </div>
                 
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
+                <div className="flex gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
                     2
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">Use Voice Input</p>
-                    <p className="text-sm text-muted-foreground">Click the microphone icon to speak your questions instead of typing.</p>
+                    <p className="font-medium text-foreground text-sm">Use Voice Input</p>
+                    <p className="text-xs text-muted-foreground">Click the microphone icon to speak your questions.</p>
                   </div>
                 </div>
                 
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
+                <div className="flex gap-2">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
                     3
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">Generate Blueprints</p>
-                    <p className="text-sm text-muted-foreground">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
+                    <p className="font-medium text-foreground text-sm">Generate Blueprints</p>
+                    <p className="text-xs text-muted-foreground">Create sustainable home designs after chatting.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t">
-                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <Lightbulb className="h-3.5 w-3.5 text-primary" />
-                  Try the sample questions below to get started!
+              <div className="pt-3 border-t">
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Lightbulb className="h-3 w-3 text-primary" />
+                  Try the sample questions to get started
                 </p>
               </div>
             </DialogDescription>
           </DialogHeader>
-          <div className="flex justify-end gap-2 pt-4">
+          <div className="pt-3">
             <Button 
               onClick={handleCloseWelcome} 
               className="w-full"
             >
-              Got it, let's start!
+              Get Started
             </Button>
           </div>
         </DialogContent>
       </Dialog>
 
       <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)]">
-        <Card className="h-full flex flex-col rounded-lg shadow-lg border overflow-hidden bg-card">
+        <Card className="h-full flex flex-col border overflow-hidden bg-card">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
               onClick={() => navigate('/bills')}
               variant="ghost"
               size="icon"
-              className="rounded-md hover:bg-accent transition-colors"
               aria-label="Go to Bills"
             >
               <FileText className="h-4 w-4" />
@@ -269,20 +268,19 @@ const Design = () => {
               onClick={handleClose}
               variant="ghost"
               size="icon"
-              className="rounded-md hover:bg-destructive/10 transition-colors"
               aria-label="Close chat"
             >
-              <X className="h-4 w-4 text-destructive" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b bg-background/95">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Lightbulb className="h-6 w-6 text-primary" />
+          <div className="flex items-center gap-4 p-4 border-b bg-background">
+            <div className="p-2 bg-primary/10">
+              <Lightbulb className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">
+              <h1 className="text-xl font-semibold text-foreground">
                 Eco Design Advisor
               </h1>
               <p className="text-sm text-muted-foreground">AI-powered sustainable design chat</p>
@@ -290,33 +288,33 @@ const Design = () => {
           </div>
 
           {/* Chat Messages */}
-          <ScrollArea className="flex-1 p-6 relative">
-            <div className="space-y-4">
+          <ScrollArea className="flex-1 p-4">
+            <div className="space-y-3">
               {messages.length === 0 && (
                 <div className="text-center text-muted-foreground py-12">
-                  <div className="p-6 rounded-3xl mx-auto w-fit shadow-2xl bg-gradient-to-br from-primary to-primary/80">
-                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl" />
+                  <div className="p-4 mx-auto w-fit bg-muted">
+                    <Lightbulb className="h-12 w-12 text-primary" />
                   </div>
-                  <p className="text-xl mt-6 font-semibold text-primary">
+                  <p className="text-lg mt-6 font-medium text-foreground">
                     Start a conversation about sustainable design
                   </p>
-                  <p className="text-sm mt-3 text-muted-foreground">Use text or voice input below</p>
+                  <p className="text-sm mt-2 text-muted-foreground">Use text or voice input below</p>
                 </div>
               )}
               
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg px-4 py-3 ${
+                    className={`max-w-[80%] px-4 py-2 ${
                       message.role === 'user'
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted border'
+                        : 'bg-muted'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap break-words leading-relaxed">
+                    <p className="text-sm whitespace-pre-wrap break-words">
                       {message.content}
                     </p>
                   </div>
@@ -324,10 +322,10 @@ const Design = () => {
               ))}
 
               {isLoading && (
-                <div className="flex justify-start animate-fade-in">
-                  <div className="bg-muted rounded-lg px-4 py-3 border">
-                    <div className="flex items-center gap-3">
-                      <div className="flex gap-1.5">
+                <div className="flex justify-start">
+                  <div className="bg-muted px-4 py-2">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
                         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
                         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
@@ -344,13 +342,13 @@ const Design = () => {
 
           {/* Generate Blueprint Button */}
           {messages.length > 0 && (
-            <div className="px-6 py-4 border-t bg-background/95">
+            <div className="px-4 py-3 border-t bg-background">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full h-11"
+                className="w-full"
                 variant="default"
               >
-                <Home className="mr-2 h-5 w-5" />
+                <Home className="mr-2 h-4 w-4" />
                 Generate House Blueprint
               </Button>
             </div>
@@ -358,14 +356,14 @@ const Design = () => {
 
           {/* Sample Prompts */}
           {messages.length === 0 && (
-            <div className="px-6 pb-6 border-t bg-background/95">
-              <p className="text-sm text-foreground font-medium mb-3 mt-4">Sample Questions:</p>
+            <div className="px-4 pb-4 border-t bg-background">
+              <p className="text-sm text-foreground font-medium mb-2 mt-3">Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-3 py-2 rounded-md bg-muted hover:bg-accent text-foreground transition-colors border"
+                    className="text-xs px-3 py-1.5 bg-muted hover:bg-accent text-foreground border"
                   >
                     {sample}
                   </button>
@@ -375,15 +373,15 @@ const Design = () => {
           )}
 
           {/* Input Area */}
-          <div className="p-6 border-t bg-background/95">
-            <div className="flex gap-3 items-end">
+          <div className="p-4 border-t bg-background">
+            <div className="flex gap-2 items-end">
               <div className="flex-1">
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[56px] max-h-[120px] px-4 py-3 rounded-md border bg-background text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
+                  placeholder="Type your question here..."
+                  className="w-full min-h-[44px] max-h-[120px] px-3 py-2 border bg-background text-sm resize-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
                   rows={1}
                 />
               </div>
@@ -392,15 +390,15 @@ const Design = () => {
                 onClick={isRecording ? stopRecording : startRecording}
                 variant="outline"
                 size="icon"
-                className={`h-[56px] w-[56px] rounded-md transition-colors ${
-                  isRecording ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : 'hover:bg-accent'
+                className={`h-[44px] w-[44px] ${
+                  isRecording ? 'bg-destructive text-destructive-foreground' : ''
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
                 {isRecording ? (
-                  <MicOff className="h-5 w-5" />
+                  <MicOff className="h-4 w-4" />
                 ) : (
-                  <Mic className="h-5 w-5" />
+                  <Mic className="h-4 w-4" />
                 )}
               </Button>
 
@@ -408,10 +406,10 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[56px] w-[56px] rounded-md"
+                className="h-[44px] w-[44px]"
                 aria-label="Send message"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>
