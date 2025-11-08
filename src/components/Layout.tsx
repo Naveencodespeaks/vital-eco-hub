@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users, Sparkles, Target, Mic } from "lucide-react";
+import { Leaf, LayoutDashboard, MessageSquare, BarChart3, Settings, LogOut, FileText, Trophy, Users, Sparkles, Target } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Bell from "./notifications/Bell";
 
@@ -57,7 +57,6 @@ const Layout = ({ children }: LayoutProps) => {
   const navItems = [
     { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/chat", icon: MessageSquare, label: "Chat" },
-    { path: "/voice", icon: Mic, label: "Voice" },
     { path: "/analytics", icon: BarChart3, label: "Analytics" },
     { path: "/bills", icon: FileText, label: "Bills" },
     { path: "/challenges", icon: Target, label: "Challenges" },

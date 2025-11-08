@@ -15,7 +15,6 @@ import Design from "./pages/Design";
 import AboutAI from "./pages/AboutAI";
 import Challenges from "./pages/Challenges";
 import Achievements from "./pages/Achievements";
-import Voice from "./pages/Voice";
 import NotFound from "./pages/NotFound";
 import Agentverse from "./pages/Agentverse";
 
@@ -37,7 +36,6 @@ const App = () => (
           <Route path="/image-analyzer" element={<ImageAnalyzer />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/achievements" element={<Achievements />} />
-          <Route path="/voice" element={<Voice />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/design" element={<Design />} />
           <Route path="/about-ai" element={<AboutAI />} />
