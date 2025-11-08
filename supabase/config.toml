@@ -20,3 +20,9 @@ verify_jwt = false
 
 [functions.voice_to_text]
 verify_jwt = true
+
+[functions.pcwno_plan]
+verify_jwt = true
+
+[functions.pcwno_apply]
+verify_jwt = true

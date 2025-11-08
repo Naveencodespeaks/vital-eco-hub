@@ -145,6 +145,47 @@ export type Database = {
         }
         Relationships: []
       }
+      dt_runs: {
+        Row: {
+          confidence_level: number
+          created_at: string
+          id: string
+          policy_id: string | null
+          simulation_items: Json
+          total_kg: number
+          total_water_kl: number
+          user_id: string
+        }
+        Insert: {
+          confidence_level?: number
+          created_at?: string
+          id?: string
+          policy_id?: string | null
+          simulation_items?: Json
+          total_kg?: number
+          total_water_kl?: number
+          user_id: string
+        }
+        Update: {
+          confidence_level?: number
+          created_at?: string
+          id?: string
+          policy_id?: string | null
+          simulation_items?: Json
+          total_kg?: number
+          total_water_kl?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dt_runs_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       eco_points: {
         Row: {
           badge_level: string
@@ -326,6 +367,30 @@ export type Database = {
           },
         ]
       }
+      policies: {
+        Row: {
+          created_at: string
+          id: string
+          interventions: Json
+          rationale: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interventions?: Json
+          rationale: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interventions?: Json
+          rationale?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -381,6 +446,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      scm_edges: {
+        Row: {
+          created_at: string
+          id: string
+          source_node: string
+          target_node: string
+          user_id: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          source_node: string
+          target_node: string
+          user_id: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          source_node?: string
+          target_node?: string
+          user_id?: string
+          weight?: number
+        }
+        Relationships: []
       }
       streaks: {
         Row: {
