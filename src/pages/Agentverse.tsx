@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Sparkles, Play, Network, TrendingUp, Award } from "lucide-react";
+import { Loader2, Sparkles, Play, Network, TrendingUp, Award, ArrowRight } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import Layout from "@/components/Layout";
 
 export default function Agentverse() {
   const [loading, setLoading] = useState(false);
@@ -218,190 +219,218 @@ export default function Agentverse() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-success-light p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-success to-chart-2 bg-clip-text text-transparent">
-            PCW-NO: Prescriptive Nexus Optimizer
-          </h1>
-          <p className="text-muted-foreground">
-            AI-powered causal inference for sustainability optimization
-          </p>
-        </div>
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-success-light/20">
+        <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-3 animate-fade-in">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-success via-chart-2 to-chart-3 bg-clip-text text-transparent">
+              PCW-NO: Prescriptive Nexus Optimizer
+            </h1>
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+              AI-powered causal inference for sustainability optimization using digital twin simulation
+            </p>
+          </div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column: Causal Policy Engine */}
-          <Card className="bg-card/50 backdrop-blur border-success-border/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-success" />
-                Causal Policy Engine
-              </CardTitle>
-              <CardDescription>Input your context to generate a prescriptive plan</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="avg_kwh">Avg kWh</Label>
-                  <Input
-                    id="avg_kwh"
-                    type="number"
-                    value={context.avg_kwh}
-                    onChange={(e) => setContext({ ...context, avg_kwh: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="avg_liters">Avg Liters</Label>
-                  <Input
-                    id="avg_liters"
-                    type="number"
-                    value={context.avg_liters}
-                    onChange={(e) => setContext({ ...context, avg_liters: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="grid_price">Grid Price (₹/kWh)</Label>
-                  <Input
-                    id="grid_price"
-                    type="number"
-                    step="0.1"
-                    value={context.grid_price_rs_per_kwh}
-                    onChange={(e) => setContext({ ...context, grid_price_rs_per_kwh: Number(e.target.value) })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lst">LST (°C)</Label>
-                  <Input
-                    id="lst"
-                    type="number"
-                    value={context.lst_c}
-                    onChange={(e) => setContext({ ...context, lst_c: Number(e.target.value) })}
-                  />
-                </div>
-              </div>
-
-              <Button 
-                onClick={handleGeneratePlan} 
-                disabled={generating}
-                className="w-full bg-gradient-to-r from-success to-chart-2 hover:opacity-90"
-              >
-                {generating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating Plan...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Generate Prescriptive Plan
-                  </>
-                )}
-              </Button>
-
-              {currentPlan && (
-                <div className="mt-6 space-y-4 p-4 bg-success-light/50 rounded-lg border border-success-border/30">
-                  <div>
-                    <h3 className="font-semibold text-success mb-2">Rationale</h3>
-                    <p className="text-sm text-muted-foreground">{currentPlan.rationale}</p>
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+            {/* Left Column: Causal Policy Engine */}
+            <Card className="bg-card/80 backdrop-blur-md border-success/30 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Sparkles className="h-5 w-5 text-success" />
+                  Causal Policy Engine
+                </CardTitle>
+                <CardDescription className="text-sm">Input your context to generate a prescriptive plan</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="avg_kwh" className="text-sm font-medium">Avg kWh</Label>
+                    <Input
+                      id="avg_kwh"
+                      type="number"
+                      value={context.avg_kwh}
+                      onChange={(e) => setContext({ ...context, avg_kwh: Number(e.target.value) })}
+                      className="transition-all focus:ring-2 focus:ring-success"
+                    />
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="avg_liters" className="text-sm font-medium">Avg Liters</Label>
+                    <Input
+                      id="avg_liters"
+                      type="number"
+                      value={context.avg_liters}
+                      onChange={(e) => setContext({ ...context, avg_liters: Number(e.target.value) })}
+                      className="transition-all focus:ring-2 focus:ring-success"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="grid_price" className="text-sm font-medium">Grid Price (₹/kWh)</Label>
+                    <Input
+                      id="grid_price"
+                      type="number"
+                      step="0.1"
+                      value={context.grid_price_rs_per_kwh}
+                      onChange={(e) => setContext({ ...context, grid_price_rs_per_kwh: Number(e.target.value) })}
+                      className="transition-all focus:ring-2 focus:ring-success"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lst" className="text-sm font-medium">LST (°C)</Label>
+                    <Input
+                      id="lst"
+                      type="number"
+                      value={context.lst_c}
+                      onChange={(e) => setContext({ ...context, lst_c: Number(e.target.value) })}
+                      className="transition-all focus:ring-2 focus:ring-success"
+                    />
+                  </div>
+                </div>
 
-                  <div>
-                    <h3 className="font-semibold text-success mb-2">Interventions</h3>
-                    <div className="space-y-2">
-                      {currentPlan.interventions?.map((intervention: any, idx: number) => (
-                        <div key={idx} className="p-3 bg-background/50 rounded border border-success-border/20">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <p className="font-medium capitalize">{intervention.type?.replace(/_/g, ' ')}</p>
-                              <p className="text-xs text-muted-foreground">{intervention.window}</p>
-                            </div>
-                            <div className="text-right text-sm">
-                              <div className="text-success">CO₂: {intervention.expected_kg} kg</div>
-                              {intervention.expected_water_kl && (
-                                <div className="text-info">H₂O: {intervention.expected_water_kl} kL</div>
-                              )}
+                <Button 
+                  onClick={handleGeneratePlan} 
+                  disabled={generating}
+                  className="w-full bg-gradient-to-r from-success via-chart-2 to-chart-3 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                  size="lg"
+                >
+                  {generating ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Generating Plan...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-5 w-5" />
+                      Generate Prescriptive Plan
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+
+                {currentPlan && (
+                  <div className="space-y-4 p-5 bg-gradient-to-br from-success-light/30 to-success-light/10 rounded-xl border border-success/30 shadow-sm animate-fade-in">
+                    <div>
+                      <h3 className="font-semibold text-success mb-2 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4" />
+                        Rationale
+                      </h3>
+                      <p className="text-sm text-foreground/80 leading-relaxed">{currentPlan.rationale}</p>
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold text-success mb-3 flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4" />
+                        Interventions
+                      </h3>
+                      <div className="space-y-3">
+                        {currentPlan.interventions?.map((intervention: any, idx: number) => (
+                          <div key={idx} className="p-4 bg-background/80 backdrop-blur rounded-lg border border-success/20 hover:border-success/40 transition-all duration-200 hover:shadow-md">
+                            <div className="flex justify-between items-start gap-4">
+                              <div className="flex-1">
+                                <p className="font-medium capitalize text-base">{intervention.type?.replace(/_/g, ' ')}</p>
+                                <p className="text-xs text-muted-foreground mt-1">⏱️ {intervention.window}</p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm font-semibold text-success">🌱 {intervention.expected_kg} kg CO₂</div>
+                                {intervention.expected_water_kl > 0 && (
+                                  <div className="text-xs text-info mt-1">💧 {intervention.expected_water_kl} kL H₂O</div>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Right Column: Digital Twin Simulation */}
-          <Card className="bg-card/50 backdrop-blur border-chart-2/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Play className="h-5 w-5 text-chart-2" />
-                Digital Twin Simulation
-              </CardTitle>
-              <CardDescription>Simulated outcomes and savings</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {dtRun ? (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-success-light/50 rounded-lg border border-success-border/30">
-                      <p className="text-sm text-muted-foreground">Total CO₂ Savings</p>
-                      <p className="text-2xl font-bold text-success">{dtRun.total_kg} kg</p>
-                    </div>
-                    <div className="p-4 bg-info-light/50 rounded-lg border border-info-border/30">
-                      <p className="text-sm text-muted-foreground">Water Savings</p>
-                      <p className="text-2xl font-bold text-info">{dtRun.total_water_kl} kL</p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-chart-5/10 rounded-lg border border-chart-5/30">
-                    <p className="text-sm text-muted-foreground mb-2">Confidence Level</p>
-                    <Progress value={dtRun.confidence_level * 100} className="h-2" />
-                    <p className="text-right text-sm mt-1 text-chart-5">
-                      {(dtRun.confidence_level * 100).toFixed(1)}%
-                    </p>
-                  </div>
-
-                  {goals && (
-                    <div className="p-4 bg-warning-light/50 rounded-lg border border-warning-border/30">
-                      <p className="text-sm text-muted-foreground mb-2">Progress vs Target</p>
-                      <Progress value={goalProgress} className="h-2" />
-                      <div className="flex justify-between text-xs mt-1">
-                        <span className="text-warning">{dtRun.total_kg} kg</span>
-                        <span className="text-muted-foreground">Target: {goals.target_energy_saving} kg</span>
+                        ))}
                       </div>
                     </div>
-                  )}
-
-                  <Button 
-                    onClick={handleApplyPlan} 
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-chart-2 to-chart-3 hover:opacity-90"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Applying...
-                      </>
-                    ) : (
-                      <>
-                        <Play className="mr-2 h-4 w-4" />
-                        Apply Plan
-                      </>
-                    )}
-                  </Button>
-                </>
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <Play className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Generate a plan to see simulation results</p>
-                </div>
-              )}
+                  </div>
+                )}
             </CardContent>
           </Card>
-        </div>
+
+            {/* Right Column: Digital Twin Simulation */}
+            <Card className="bg-card/80 backdrop-blur-md border-chart-2/30 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Play className="h-5 w-5 text-chart-2" />
+                  Digital Twin Simulation
+                </CardTitle>
+                <CardDescription className="text-sm">Simulated outcomes and savings</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                {dtRun ? (
+                  <div className="space-y-5 animate-fade-in">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="p-5 bg-gradient-to-br from-success-light/40 to-success-light/20 rounded-xl border border-success/30 shadow-sm hover:shadow-md transition-all">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">Total CO₂ Savings</p>
+                        <p className="text-3xl font-bold text-success">{dtRun.total_kg} <span className="text-lg">kg</span></p>
+                        <p className="text-xs text-success/70 mt-1">🌱 Carbon reduced</p>
+                      </div>
+                      <div className="p-5 bg-gradient-to-br from-info-light/40 to-info-light/20 rounded-xl border border-info/30 shadow-sm hover:shadow-md transition-all">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">Water Savings</p>
+                        <p className="text-3xl font-bold text-info">{dtRun.total_water_kl} <span className="text-lg">kL</span></p>
+                        <p className="text-xs text-info/70 mt-1">💧 Water conserved</p>
+                      </div>
+                    </div>
+
+                    <div className="p-5 bg-gradient-to-br from-chart-5/10 to-chart-5/5 rounded-xl border border-chart-5/30 shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm font-medium text-muted-foreground">Confidence Level</p>
+                        <span className="text-sm font-bold text-chart-5">
+                          {(dtRun.confidence_level * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                      <Progress value={dtRun.confidence_level * 100} className="h-2.5" />
+                      <p className="text-xs text-muted-foreground mt-2">AI simulation accuracy</p>
+                    </div>
+
+                    {goals && (
+                      <div className="p-5 bg-gradient-to-br from-warning-light/40 to-warning-light/20 rounded-xl border border-warning/30 shadow-sm">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm font-medium text-muted-foreground">Progress vs Target</p>
+                          <span className="text-xs text-muted-foreground">
+                            {Math.min(goalProgress, 100).toFixed(0)}% complete
+                          </span>
+                        </div>
+                        <Progress value={goalProgress} className="h-2.5" />
+                        <div className="flex justify-between text-xs mt-2">
+                          <span className="text-warning font-semibold">Current: {dtRun.total_kg} kg</span>
+                          <span className="text-muted-foreground">Goal: {goals.target_energy_saving} kg</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <Button 
+                      onClick={handleApplyPlan} 
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-chart-2 via-chart-3 to-chart-4 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                      size="lg"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Applying Plan...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="mr-2 h-5 w-5" />
+                          Apply Plan Now
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center py-16 px-4">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted/30 mb-4">
+                      <Play className="h-10 w-10 text-muted-foreground/40" />
+                    </div>
+                    <p className="text-muted-foreground font-medium">No simulation data yet</p>
+                    <p className="text-sm text-muted-foreground/70 mt-1">Generate a plan to see predicted outcomes</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
 
         {/* Bottom: Causal Graph */}
         <Card className="bg-card/50 backdrop-blur border-chart-3/20">
@@ -708,7 +737,8 @@ export default function Agentverse() {
             </CardContent>
           </Card>
         )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
