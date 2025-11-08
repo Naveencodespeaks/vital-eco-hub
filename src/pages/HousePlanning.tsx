@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Home, Compass, Building, Leaf, ArrowLeft, TrendingUp } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, Home, Compass, Building, Leaf, ArrowLeft, TrendingUp, Calendar, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
 
 interface BlueprintResult {
   id: string;
@@ -25,6 +27,7 @@ const HousePlanning = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<BlueprintResult | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   
   const [plotSize, setPlotSize] = useState("");
   const [plotUnit, setPlotUnit] = useState("sqft");
@@ -32,6 +35,31 @@ const HousePlanning = () => {
   const [numFloors, setNumFloors] = useState("1");
   const [numRooms, setNumRooms] = useState("");
   const [greenFeatures, setGreenFeatures] = useState<string[]>([]);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setUserId(user.id);
+      }
+    });
+  }, []);
+
+  // Fetch saved blueprints
+  const { data: savedBlueprints, refetch: refetchBlueprints } = useQuery({
+    queryKey: ['blueprints', userId],
+    queryFn: async () => {
+      if (!userId) return [];
+      const { data, error } = await supabase
+        .from('blueprints')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!userId,
+  });
 
   const features = [
     { id: 'solar', label: 'Solar Panels' },
@@ -77,15 +105,11 @@ const HousePlanning = () => {
       if (error) throw error;
 
       setResult(data.blueprint);
+      refetchBlueprints();
       toast({
         title: "House Plan Generated!",
         description: "Your sustainable Vastu-compliant house plan is ready.",
       });
-      
-      // Navigate to impact page after successful generation
-      setTimeout(() => {
-        navigate(`/impact?design_id=${data.blueprint.id}`);
-      }, 1500);
     } catch (error) {
       console.error('Error generating house plan:', error);
       toast({
@@ -121,9 +145,16 @@ const HousePlanning = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Input Form */}
-            <Card>
+          <Tabs defaultValue="generate" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="generate">Generate New Plan</TabsTrigger>
+              <TabsTrigger value="saved">Saved Plans ({savedBlueprints?.length || 0})</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="generate">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Input Form */}
+                <Card>
               <CardHeader>
                 <CardTitle>Design Parameters</CardTitle>
                 <CardDescription>Enter your house specifications</CardDescription>
@@ -333,8 +364,162 @@ const HousePlanning = () => {
                   </CardContent>
                 </Card>
               )}
-            </div>
-          </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="saved">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {savedBlueprints && savedBlueprints.length > 0 ? (
+                  savedBlueprints.map((blueprint) => (
+                    <Card key={blueprint.id} className="overflow-hidden">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg flex items-center justify-between">
+                          <span>
+                            {blueprint.num_rooms} Rooms
+                          </span>
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                        </CardTitle>
+                        <CardDescription>
+                          {blueprint.plot_size} {blueprint.plot_unit} • {blueprint.facing_direction} Facing
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {blueprint.blueprint_image_url && (
+                          <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                            <img
+                              src={blueprint.blueprint_image_url}
+                              alt="House Plan Blueprint"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Eco Score:</span>
+                            <span className="font-semibold text-primary">
+                              {blueprint.sustainability_score}/100
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Vastu Rating:</span>
+                            <span className="font-semibold text-primary">
+                              {blueprint.vastu_rating}/10
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Floors:</span>
+                            <span className="font-semibold">
+                              {blueprint.num_floors}
+                            </span>
+                          </div>
+                        </div>
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => setResult(blueprint)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <Card className="col-span-full border-dashed">
+                    <CardContent className="flex flex-col items-center justify-center py-12">
+                      <Home className="h-16 w-16 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground text-center">
+                        No saved house plans yet. Generate your first plan to get started!
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+
+              {result && (
+                <div className="mt-6 grid md:grid-cols-2 gap-6">
+                  {result.blueprint_image_url && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Blueprint Image</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <img
+                          src={result.blueprint_image_url}
+                          alt="Generated House Plan"
+                          className="w-full rounded-lg border"
+                        />
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  <div className="space-y-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Sustainability Metrics</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm font-medium">Eco Index</span>
+                            <span className="text-sm font-bold text-primary">
+                              {result.sustainability_score}/100
+                            </span>
+                          </div>
+                          <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary transition-all duration-500"
+                              style={{ width: `${result.sustainability_score}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm font-medium">Vastu Compliance</span>
+                            <span className="text-sm font-bold text-primary">
+                              {result.vastu_rating}/10
+                            </span>
+                          </div>
+                          <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary transition-all duration-500"
+                              style={{ width: `${(result.vastu_rating / 10) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Energy Efficiency Insights</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground whitespace-pre-line">
+                          {result.energy_insights}
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-dashed border-primary/30">
+                      <CardContent className="flex flex-col items-center justify-center py-8">
+                        <TrendingUp className="h-12 w-12 text-primary mb-3" />
+                        <h3 className="font-semibold mb-2">View Full Impact Report</h3>
+                        <p className="text-sm text-muted-foreground text-center mb-4">
+                          See detailed carbon savings, water efficiency, and energy metrics
+                        </p>
+                        <Button onClick={() => navigate(`/impact?design_id=${result.id}`)}>
+                          View Impact Report
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </Layout>
