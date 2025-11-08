@@ -18,6 +18,7 @@ import Achievements from "./pages/Achievements";
 import NotFound from "./pages/NotFound";
 import Agentverse from "./pages/Agentverse";
 import HousePlanning from "./pages/HousePlanning";
+import Impact from "./pages/Impact";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/about-ai" element={<AboutAI />} />
           <Route path="/agentverse" element={<Agentverse />} />
           <Route path="/house-planning" element={<HousePlanning />} />
+          <Route path="/impact" element={<Impact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

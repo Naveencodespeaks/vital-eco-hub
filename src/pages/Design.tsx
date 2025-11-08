@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, Mic, MicOff, X, Send, Volume2 } from "lucide-react";
+import { Lightbulb, Mic, MicOff, X, Send, Volume2, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -136,6 +136,10 @@ const Design = () => {
     navigate('/dashboard');
   };
 
+  const handleGenerateBlueprint = () => {
+    navigate('/house-planning');
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -233,6 +237,20 @@ const Design = () => {
               <div ref={messagesEndRef} />
             </div>
           </ScrollArea>
+
+          {/* Generate Blueprint Button */}
+          {messages.length > 0 && (
+            <div className="px-6 py-4 border-t border-border/50">
+              <Button 
+                onClick={handleGenerateBlueprint}
+                className="w-full"
+                variant="default"
+              >
+                <Home className="mr-2 h-4 w-4" />
+                Generate House Blueprint
+              </Button>
+            </div>
+          )}
 
           {/* Sample Prompts */}
           {messages.length === 0 && (

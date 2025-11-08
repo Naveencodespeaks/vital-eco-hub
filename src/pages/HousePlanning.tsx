@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Home, Compass, Building, Leaf, ArrowLeft } from "lucide-react";
+import { Loader2, Home, Compass, Building, Leaf, ArrowLeft, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -81,6 +81,11 @@ const HousePlanning = () => {
         title: "House Plan Generated!",
         description: "Your sustainable Vastu-compliant house plan is ready.",
       });
+      
+      // Navigate to impact page after successful generation
+      setTimeout(() => {
+        navigate(`/impact?design_id=${data.blueprint.id}`);
+      }, 1500);
     } catch (error) {
       console.error('Error generating house plan:', error);
       toast({
@@ -300,6 +305,19 @@ const HousePlanning = () => {
                       <p className="text-sm text-muted-foreground whitespace-pre-line">
                         {result.energy_insights}
                       </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-dashed border-primary/30">
+                    <CardContent className="flex flex-col items-center justify-center py-8">
+                      <TrendingUp className="h-12 w-12 text-primary mb-3" />
+                      <h3 className="font-semibold mb-2">View Full Impact Report</h3>
+                      <p className="text-sm text-muted-foreground text-center mb-4">
+                        See detailed carbon savings, water efficiency, and energy metrics
+                      </p>
+                      <Button onClick={() => navigate(`/impact?design_id=${result.id}`)}>
+                        View Impact Report
+                      </Button>
                     </CardContent>
                   </Card>
                 </>
