@@ -193,10 +193,10 @@ const Design = () => {
         <DialogContent className="sm:max-w-md border-animate-slow neon-glow rounded-3xl shadow-2xl">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 border-animate-fast rounded-2xl animate-pulse-slow shadow-xl neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast">
+              <div className="p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
                 <Sparkles className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
               </div>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
+              <DialogTitle className="text-2xl font-bold text-primary">
                 Welcome to Eco Design Advisor!
               </DialogTitle>
             </div>
@@ -244,7 +244,7 @@ const Design = () => {
           <div className="flex justify-end gap-2 pt-4">
             <Button 
               onClick={handleCloseWelcome} 
-              className="w-full h-12 border-animate-slow neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient-fast border-0 font-semibold rounded-2xl"
+              className="w-full h-12 shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-[1.02] border-0 font-semibold rounded-2xl text-primary-foreground"
             >
               Got it, let's start!
             </Button>
@@ -287,15 +287,15 @@ const Design = () => {
 
           {/* Header */}
           <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-neon-cyan/5 to-neon-pink/5 animate-gradient-fast" />
-            <div className="relative p-3 border-animate-fast rounded-2xl animate-pulse-slow shadow-lg neon-glow bg-gradient-to-br from-primary via-neon-cyan to-neon-pink animate-gradient-fast">
-              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/3 to-primary/5" />
+            <div className="relative p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
+              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
             </div>
             <div className="relative">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
+              <h1 className="text-2xl font-bold text-primary">
                 Eco Design Advisor
               </h1>
-              <p className="text-sm bg-gradient-to-r from-muted-foreground to-foreground bg-clip-text text-transparent">AI-powered sustainable design chat</p>
+              <p className="text-sm text-muted-foreground">AI-powered sustainable design chat</p>
             </div>
           </div>
 
@@ -304,13 +304,13 @@ const Design = () => {
             <div className="space-y-4">
               {messages.length === 0 && (
                 <div className="text-center text-muted-foreground py-12">
-                  <div className="p-6 border-animate-slow rounded-3xl mx-auto w-fit animate-float shadow-2xl neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple animate-gradient-fast">
-                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl animate-pulse" />
+                  <div className="p-6 rounded-3xl mx-auto w-fit shadow-2xl bg-gradient-to-br from-primary to-primary/80">
+                    <Lightbulb className="h-16 w-16 text-primary-foreground drop-shadow-2xl" />
                   </div>
-                  <p className="text-xl mt-6 font-semibold bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">
+                  <p className="text-xl mt-6 font-semibold text-primary">
                     Start a conversation about sustainable design
                   </p>
-                  <p className="text-sm mt-3 bg-gradient-to-r from-muted-foreground to-foreground bg-clip-text text-transparent">Use text or voice input below</p>
+                  <p className="text-sm mt-3 text-muted-foreground">Use text or voice input below</p>
                 </div>
               )}
               
@@ -322,7 +322,7 @@ const Design = () => {
                   <div
                     className={`max-w-[80%] rounded-3xl px-5 py-4 shadow-xl transition-all duration-300 hover:scale-[1.02] ${
                       message.role === 'user'
-                        ? 'border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple text-primary-foreground animate-gradient-fast'
+                        ? 'shadow-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground'
                         : 'border-animate glass-card'
                     }`}
                   >
@@ -357,10 +357,10 @@ const Design = () => {
             <div className="px-6 py-4 border-t border-border/20 glass backdrop-blur-2xl">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full border-animate-slow neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] animate-gradient-fast border-0 h-12 rounded-2xl font-semibold"
+                className="w-full shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-[1.02] border-0 h-12 rounded-2xl font-semibold text-primary-foreground"
                 variant="default"
               >
-                <Home className="mr-2 h-5 w-5 drop-shadow-lg animate-pulse" />
+                <Home className="mr-2 h-5 w-5 drop-shadow-lg" />
                 Generate House Blueprint
               </Button>
             </div>
@@ -369,7 +369,7 @@ const Design = () => {
           {/* Sample Prompts */}
           {messages.length === 0 && (
             <div className="px-6 pb-6 glass border-t border-border/20 backdrop-blur-2xl">
-              <p className="text-sm bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent mb-3 mt-4 font-semibold">💚 Sample Questions:</p>
+              <p className="text-sm text-primary mb-3 mt-4 font-semibold">💚 Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
@@ -418,7 +418,7 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[56px] w-[56px] rounded-2xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-gradient-fast border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-[56px] w-[56px] rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground"
                 aria-label="Send message"
               >
                 <Send className="h-5 w-5 drop-shadow-lg" />
