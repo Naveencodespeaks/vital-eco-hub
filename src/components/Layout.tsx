@@ -76,10 +76,10 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link to="/design" className="flex items-center space-x-3 group">
-              <div className="w-11 h-11 rounded-2xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl animate-gradient-fast">
-                <Leaf className="w-6 h-6 text-primary-foreground drop-shadow-lg transition-transform group-hover:rotate-12 animate-pulse" />
+              <div className="w-11 h-11 rounded-2xl border-animate-fast neon-glow bg-gradient-to-br from-primary via-neon-cyan via-neon-pink to-neon-purple flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl">
+                <Leaf className="w-6 h-6 text-primary-foreground drop-shadow-lg transition-transform group-hover:rotate-12" />
               </div>
-              <span className="font-bold text-xl bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-fast">EcoPulse AI</span>
+              <span className="font-bold text-xl bg-gradient-to-r from-primary via-neon-cyan via-neon-pink to-neon-purple bg-clip-text text-transparent">EcoPulse AI</span>
             </Link>
 
             <div className="hidden md:flex items-center space-x-2">

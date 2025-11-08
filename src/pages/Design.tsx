@@ -369,13 +369,13 @@ const Design = () => {
           {/* Sample Prompts */}
           {messages.length === 0 && (
             <div className="px-6 pb-6 glass border-t border-border/20 backdrop-blur-2xl">
-              <p className="text-sm bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent mb-3 mt-4 font-semibold animate-gradient-fast">💚 Sample Questions:</p>
+              <p className="text-sm bg-gradient-to-r from-primary via-neon-cyan to-neon-pink bg-clip-text text-transparent mb-3 mt-4 font-semibold">💚 Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-4 py-2 rounded-2xl border-animate hover:scale-105 text-foreground/90 transition-all duration-300 hover:neon-glow"
+                    className="text-xs px-4 py-2 rounded-2xl glass hover:scale-105 text-foreground/90 transition-all duration-300 hover:shadow-lg border-border/20 hover:bg-primary/5"
                   >
                     {sample}
                   </button>
@@ -403,7 +403,7 @@ const Design = () => {
                 variant="outline"
                 size="icon"
                 className={`h-[56px] w-[56px] rounded-2xl hover:scale-105 transition-all duration-300 border-0 ${
-                  isRecording ? 'border-animate-fast neon-glow bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground animate-pulse shadow-xl' : 'border-animate hover:neon-glow'
+                  isRecording ? 'border-animate-fast neon-glow bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground shadow-xl' : 'glass hover:bg-primary/10'
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
