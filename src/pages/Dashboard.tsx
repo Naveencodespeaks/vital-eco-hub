@@ -1,22 +1,46 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Zap, Droplets, Cloud, TrendingDown, Sparkles } from "lucide-react";
+import { Zap, Droplets, Cloud, TrendingDown, Sparkles, BarChart3, Target, Trophy } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Layout from "@/components/Layout";
 import ForecastChart from "@/components/dashboard/ForecastChart";
+import Analytics from "./Analytics";
+import Challenges from "./Challenges";
+import Achievements from "./Achievements";
+import ImageAnalyzer from "./Leaderboard";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [metrics, setMetrics] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [energyUsage, setEnergyUsage] = useState("");
   const [waterUsage, setWaterUsage] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+
+  // Determine active insights tab based on hash
+  const getActiveInsightsTab = () => {
+    const hash = location.hash.replace('#', '');
+    if (['analytics', 'challenges', 'achievements', 'analyzer'].includes(hash)) {
+      return hash;
+    }
+    return 'analytics';
+  };
+
+  const [activeInsightsTab, setActiveInsightsTab] = useState(getActiveInsightsTab());
+
+  useEffect(() => {
+    const newTab = getActiveInsightsTab();
+    setActiveInsightsTab(newTab);
+  }, [location.hash]);
 
   useEffect(() => {
     fetchData();
@@ -257,6 +281,61 @@ const Dashboard = () => {
                 {loading ? "Analyzing..." : "Get AI Insights"}
               </Button>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Insights Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">Insights Hub</CardTitle>
+            <p className="text-muted-foreground text-sm">
+              Track your progress, complete challenges, and analyze your impact
+            </p>
+          </CardHeader>
+          <CardContent>
+            <Tabs 
+              value={activeInsightsTab} 
+              onValueChange={(value) => {
+                setActiveInsightsTab(value);
+                navigate(`#${value}`);
+              }} 
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="analytics" className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Analytics</span>
+                </TabsTrigger>
+                <TabsTrigger value="challenges" className="flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  <span className="hidden sm:inline">Challenges</span>
+                </TabsTrigger>
+                <TabsTrigger value="achievements" className="flex items-center gap-2">
+                  <Trophy className="w-4 w-4" />
+                  <span className="hidden sm:inline">Achievements</span>
+                </TabsTrigger>
+                <TabsTrigger value="analyzer" className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="hidden sm:inline">Analyzer</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="analytics" className="mt-6">
+                <Analytics />
+              </TabsContent>
+
+              <TabsContent value="challenges" className="mt-6">
+                <Challenges />
+              </TabsContent>
+
+              <TabsContent value="achievements" className="mt-6">
+                <Achievements />
+              </TabsContent>
+
+              <TabsContent value="analyzer" className="mt-6">
+                <ImageAnalyzer />
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>
