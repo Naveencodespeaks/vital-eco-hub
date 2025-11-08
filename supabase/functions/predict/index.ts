@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { energy_usage, water_usage } = await req.json();
+    const { energy_usage, water_usage, traffic_data } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
     if (!LOVABLE_API_KEY) {
@@ -31,21 +31,25 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are an AI sustainability advisor. Analyze energy and water usage data and provide insights to reduce waste. Always respond in JSON format with these fields:
+            content: `You are an AI sustainability advisor. Analyze energy, water, and traffic data and provide insights to reduce waste. Always respond in JSON format with these fields:
             {
               "ai_insight": "string (3-5 sentences with actionable advice)",
               "predicted_saving": number (percentage, 5-30),
               "risk_level": "low" | "medium" | "high",
-              "tips": ["tip1", "tip2", "tip3"] (3 practical tips)
+              "tips": ["tip1", "tip2", "tip3"] (3 practical tips),
+              "traffic_prediction": number (predicted vehicles per hour for next period),
+              "water_prediction": number (predicted liters per day for next period),
+              "electricity_prediction": number (predicted kWh per day for next period)
             }`
           },
           {
             role: 'user',
             content: `Analyze this usage data:
+Traffic: ${traffic_data} vehicles per hour
 Energy: ${energy_usage} kWh
 Water: ${water_usage} liters
 
-Provide sustainability insights and predicted savings in JSON format.`
+Provide sustainability insights, predicted savings, and future predictions for traffic, water, and electricity in JSON format.`
           }
         ],
       }),
@@ -91,7 +95,10 @@ Provide sustainability insights and predicted savings in JSON format.`
           'Review your energy consumption patterns',
           'Consider water-saving fixtures',
           'Monitor usage during peak hours'
-        ]
+        ],
+        traffic_prediction: Math.round(traffic_data * 1.05),
+        water_prediction: Math.round(water_usage * 1.02),
+        electricity_prediction: Math.round(energy_usage * 1.03)
       };
     }
 
