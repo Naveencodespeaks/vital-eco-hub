@@ -26,3 +26,6 @@ verify_jwt = true
 
 [functions.pcwno_apply]
 verify_jwt = true
+
+[functions.pcwno_discover_edges]
+verify_jwt = true

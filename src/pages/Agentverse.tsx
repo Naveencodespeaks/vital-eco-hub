@@ -167,7 +167,27 @@ export default function Agentverse() {
   };
 
   const handleAutoDiscoverEdges = async () => {
-    toast.info("Auto-discovery feature coming soon!");
+    if (!userId) {
+      toast.error("Please log in to discover edges");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('pcwno_discover_edges', {
+        body: { user_id: userId }
+      });
+
+      if (error) throw error;
+
+      toast.success(data.message || "Causal edges discovered successfully!");
+      fetchEdges();
+    } catch (error: any) {
+      console.error('Error discovering edges:', error);
+      toast.error(error.message || "Failed to discover edges");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const goalProgress = goals && dtRun 
@@ -392,9 +412,20 @@ export default function Agentverse() {
                 variant="outline" 
                 size="sm"
                 onClick={handleAutoDiscoverEdges}
+                disabled={loading}
                 className="border-cyan-500/50"
               >
-                Auto-Discover Edges
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Discovering...
+                  </>
+                ) : (
+                  <>
+                    <Network className="mr-2 h-4 w-4" />
+                    Auto-Discover Edges
+                  </>
+                )}
               </Button>
             </div>
           </CardHeader>
