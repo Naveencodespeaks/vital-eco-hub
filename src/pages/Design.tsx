@@ -190,51 +190,51 @@ const Design = () => {
     <Layout>
       {/* Welcome Dialog */}
       <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
-        <DialogContent className="sm:max-w-md border-animate-slow neon-glow rounded-3xl shadow-2xl">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
-                <Sparkles className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Sparkles className="h-6 w-6 text-primary" />
               </div>
-              <DialogTitle className="text-2xl font-bold text-primary">
+              <DialogTitle className="text-2xl font-bold">
                 Welcome to Eco Design Advisor!
               </DialogTitle>
             </div>
             <DialogDescription className="text-left space-y-4 pt-4">
               <div className="space-y-4">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
                     1
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">Ask Anything</p>
-                    <p className="text-sm text-muted-foreground/80">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
+                    <p className="text-sm text-muted-foreground">Get AI-powered advice on sustainable design, energy efficiency, and eco-friendly solutions.</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
                     2
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">Use Voice Input</p>
-                    <p className="text-sm text-muted-foreground/80">Click the microphone icon to speak your questions instead of typing.</p>
+                    <p className="text-sm text-muted-foreground">Click the microphone icon to speak your questions instead of typing.</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 glass flex items-center justify-center text-primary font-bold shadow-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
                     3
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">Generate Blueprints</p>
-                    <p className="text-sm text-muted-foreground/80">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
+                    <p className="text-sm text-muted-foreground">After chatting, click "Generate House Blueprint" to create sustainable home designs.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-border/20">
-                <p className="text-xs text-muted-foreground/80 flex items-center gap-1.5">
+              <div className="pt-4 border-t">
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                   <Lightbulb className="h-3.5 w-3.5 text-primary" />
                   Try the sample questions below to get started!
                 </p>
@@ -244,7 +244,7 @@ const Design = () => {
           <div className="flex justify-end gap-2 pt-4">
             <Button 
               onClick={handleCloseWelcome} 
-              className="w-full h-12 shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-[1.02] border-0 font-semibold rounded-2xl text-primary-foreground"
+              className="w-full"
             >
               Got it, let's start!
             </Button>
@@ -252,47 +252,37 @@ const Design = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)] relative">
-        {/* Crazy animated background with multiple blur orbs */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-neon-cyan/20 via-neon-pink/20 to-neon-purple/20 animate-gradient-fast" />
-          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/30 to-neon-cyan/30 rounded-full blur-3xl animate-float neon-glow" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-neon-pink/30 to-neon-purple/30 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-neon-yellow/20 to-info/20 rounded-full blur-3xl animate-float neon-glow" style={{ animationDelay: '2s' }} />
-        </div>
-        
-        <Card className="relative h-full flex flex-col rounded-3xl shadow-2xl border-0 border-animate neon-glow overflow-hidden">
+      <div className="container mx-auto px-4 py-8 max-w-5xl h-[calc(100vh-8rem)]">
+        <Card className="h-full flex flex-col rounded-lg shadow-lg border overflow-hidden bg-card">
           {/* Top Right Actions */}
           <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <Button
               onClick={() => navigate('/bills')}
               variant="ghost"
               size="icon"
-              className="rounded-2xl glass hover:scale-105 transition-all duration-300 animate-float border-0 hover:bg-primary/10"
+              className="rounded-md hover:bg-accent transition-colors"
               aria-label="Go to Bills"
             >
-              <FileText className="h-4 w-4 text-primary" />
+              <FileText className="h-4 w-4" />
             </Button>
             <Button
               onClick={handleClose}
               variant="ghost"
               size="icon"
-              className="rounded-2xl glass hover:scale-105 transition-all duration-300 animate-float border-0 hover:bg-destructive/10"
+              className="rounded-md hover:bg-destructive/10 transition-colors"
               aria-label="Close chat"
-              style={{ animationDelay: '0.5s' }}
             >
               <X className="h-4 w-4 text-destructive" />
             </Button>
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-border/20 glass backdrop-blur-2xl relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/3 to-primary/5" />
-            <div className="relative p-3 rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80">
-              <Lightbulb className="h-6 w-6 text-primary-foreground drop-shadow-lg" />
+          <div className="flex items-center gap-4 p-6 border-b bg-background/95">
+            <div className="p-3 rounded-lg bg-primary/10">
+              <Lightbulb className="h-6 w-6 text-primary" />
             </div>
-            <div className="relative">
-              <h1 className="text-2xl font-bold text-primary">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">
                 Eco Design Advisor
               </h1>
               <p className="text-sm text-muted-foreground">AI-powered sustainable design chat</p>
@@ -320,13 +310,13 @@ const Design = () => {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-3xl px-5 py-4 shadow-xl transition-all duration-300 hover:scale-[1.02] ${
+                    className={`max-w-[80%] rounded-lg px-4 py-3 ${
                       message.role === 'user'
-                        ? 'shadow-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground'
-                        : 'border-animate glass-card'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted border'
                     }`}
                   >
-                    <p className={`text-sm whitespace-pre-wrap break-words leading-relaxed ${message.role === 'user' ? 'font-medium drop-shadow-sm' : 'text-foreground/90'}`}>
+                    <p className="text-sm whitespace-pre-wrap break-words leading-relaxed">
                       {message.content}
                     </p>
                   </div>
@@ -335,14 +325,14 @@ const Design = () => {
 
               {isLoading && (
                 <div className="flex justify-start animate-fade-in">
-                  <div className="glass-card rounded-3xl px-5 py-4 shadow-xl border-border/20">
+                  <div className="bg-muted rounded-lg px-4 py-3 border">
                     <div className="flex items-center gap-3">
                       <div className="flex gap-1.5">
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-primary to-eco-accent rounded-full animate-pulse shadow-lg" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-eco-accent to-info rounded-full animate-pulse shadow-lg" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-info to-primary rounded-full animate-pulse shadow-lg" style={{ animationDelay: '300ms' }} />
+                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
                       </div>
-                      <span className="text-sm text-muted-foreground/80">EcoPulse is thinking...</span>
+                      <span className="text-sm text-muted-foreground">Thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -354,13 +344,13 @@ const Design = () => {
 
           {/* Generate Blueprint Button */}
           {messages.length > 0 && (
-            <div className="px-6 py-4 border-t border-border/20 glass backdrop-blur-2xl">
+            <div className="px-6 py-4 border-t bg-background/95">
               <Button 
                 onClick={handleGenerateBlueprint}
-                className="w-full shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-[1.02] border-0 h-12 rounded-2xl font-semibold text-primary-foreground"
+                className="w-full h-11"
                 variant="default"
               >
-                <Home className="mr-2 h-5 w-5 drop-shadow-lg" />
+                <Home className="mr-2 h-5 w-5" />
                 Generate House Blueprint
               </Button>
             </div>
@@ -368,14 +358,14 @@ const Design = () => {
 
           {/* Sample Prompts */}
           {messages.length === 0 && (
-            <div className="px-6 pb-6 glass border-t border-border/20 backdrop-blur-2xl">
-              <p className="text-sm text-primary mb-3 mt-4 font-semibold">💚 Sample Questions:</p>
+            <div className="px-6 pb-6 border-t bg-background/95">
+              <p className="text-sm text-foreground font-medium mb-3 mt-4">Sample Questions:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePrompts.map((sample, index) => (
                   <button
                     key={index}
                     onClick={() => handleSampleClick(sample)}
-                    className="text-xs px-4 py-2 rounded-2xl glass hover:scale-105 text-foreground/90 transition-all duration-300 hover:shadow-lg border-border/20 hover:bg-primary/5"
+                    className="text-xs px-3 py-2 rounded-md bg-muted hover:bg-accent text-foreground transition-colors border"
                   >
                     {sample}
                   </button>
@@ -385,7 +375,7 @@ const Design = () => {
           )}
 
           {/* Input Area */}
-          <div className="p-6 border-t border-border/20 glass backdrop-blur-2xl">
+          <div className="p-6 border-t bg-background/95">
             <div className="flex gap-3 items-end">
               <div className="flex-1">
                 <textarea
@@ -393,7 +383,7 @@ const Design = () => {
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="E.g., 'How can I design a more energy-efficient office space?'"
-                  className="w-full min-h-[56px] max-h-[120px] px-5 py-4 rounded-2xl border-animate text-sm resize-none focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 focus:scale-[1.01] focus:neon-glow placeholder:text-muted-foreground/50"
+                  className="w-full min-h-[56px] max-h-[120px] px-4 py-3 rounded-md border bg-background text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
                   rows={1}
                 />
               </div>
@@ -402,15 +392,15 @@ const Design = () => {
                 onClick={isRecording ? stopRecording : startRecording}
                 variant="outline"
                 size="icon"
-                className={`h-[56px] w-[56px] rounded-2xl hover:scale-105 transition-all duration-300 border-0 ${
-                  isRecording ? 'border-animate-fast neon-glow bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground shadow-xl' : 'glass hover:bg-primary/10'
+                className={`h-[56px] w-[56px] rounded-md transition-colors ${
+                  isRecording ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : 'hover:bg-accent'
                 }`}
                 aria-label={isRecording ? "Stop recording" : "Start voice input"}
               >
                 {isRecording ? (
-                  <MicOff className="h-5 w-5 drop-shadow-lg" />
+                  <MicOff className="h-5 w-5" />
                 ) : (
-                  <Mic className="h-5 w-5 text-primary" />
+                  <Mic className="h-5 w-5" />
                 )}
               </Button>
 
@@ -418,10 +408,10 @@ const Design = () => {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !prompt.trim()}
                 size="icon"
-                className="h-[56px] w-[56px] rounded-2xl shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary hover:to-primary transition-all duration-300 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground"
+                className="h-[56px] w-[56px] rounded-md"
                 aria-label="Send message"
               >
-                <Send className="h-5 w-5 drop-shadow-lg" />
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </div>
